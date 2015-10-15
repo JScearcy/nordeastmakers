@@ -92,8 +92,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
           url: '/bookings',
           data: reservation
       }).then(function(res) {
-        console.log(res.data);
-        updateHours(res.data);
+        getReservations();
       });
   }
 

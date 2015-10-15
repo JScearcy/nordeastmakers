@@ -5,6 +5,7 @@ app.controller('userPageCtrl', ['$scope', '$http', 'authService', function($scop
       method: 'GET',
       url: '/users/' + user.username
     }).then(function(res){
+      console.log(res.data);
       $scope.users = res.data;
     });
   }
