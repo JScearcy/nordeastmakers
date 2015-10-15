@@ -1,2 +1,8 @@
 div(ng-controller="userPageCtrl")
-  p(ng-repeat="user in users") {{user.username}}
+  form(class="loginForm" ng-repeat="user in users" layout="column") 
+    p(class="inputItem") {{user.username}}
+    md-input-container(class="inputItem")
+      md-select(name='status' id='status' ng-model='user.active' aria-label="Select user status")
+        md-option(value="true") Active
+        md-option(value="false") Disabled
+    md-button(class="inputItem md-raised md-primary" ng-click="openCardUpdate()") Update Credit Info
