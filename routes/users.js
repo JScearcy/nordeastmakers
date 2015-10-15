@@ -188,6 +188,8 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
         if (result) {
             var user = result;
             if (req.body.cardNumber) {
+                //!!An empty autobill object will remove autobill information from recurring invoices!!
+                //All fields are required when updating autobill information
                 var auto = {};
                 /*
                  auto.gateway_name = 'Stripe';
@@ -200,7 +202,8 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                  */
                 freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
                     console.log('recurring invoice updated', response.autobill);
-                } )
+                    res.sendStatus(200);
+                })
             }
 
             if (req.body.email) {
