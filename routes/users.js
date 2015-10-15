@@ -187,6 +187,22 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
             var user = result;
+            if (req.body.cardNumber) {
+                var auto = {};
+                /*
+                 auto.gateway_name = 'Stripe';
+                 auto.card = {};
+                 auto.card.number = req.body.cardNumber;
+                 auto.card.name = req.body.cardName;
+                 auto.card.expiration = {};
+                 auto.card.expiration.month = req.body.expirationMonth;
+                 auto.card.expiration.year = req.body.expirationYear;
+                 */
+                freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
+                    console.log('recurring invoice updated', response.autobill);
+                } )
+            }
+
             if (req.body.email) {
                 user.email = req.body.email;
             }

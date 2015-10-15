@@ -7,7 +7,7 @@ var freshbooks_live = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
 router.get('/', function(req, res, next){
     console.log('getting list of invoices from Freshbooks');
-    freshbooks_live.recurring.list(function(err, invoices){
+    freshbooks_live.client.list(function(err, invoices){
         console.log('printing invoices ', invoices);
         res.send(invoices);
         //res.sendStatus(200);
@@ -16,7 +16,7 @@ router.get('/', function(req, res, next){
 
 
 router.get('/inv', function(req, res){
-    freshbooks_live.recurring.get({client_id: '424911'}, function(err, response){
+    freshbooks_live.client.get('424911', function(err, response){
         if(err){console.log(err)}
         console.log('printing clients', response );
         res.send(response);
@@ -94,14 +94,14 @@ router.delete('/', function(req,res){
     inv.recurring_id = '34167';
     console.log('deleting recurring invoice ', inv);
 
-    freshbooks_live.recurring.delete({recurring_id: '34167', line_id: '123901' }, function(err, response){
-        console.log('recurring dummy invoice deleted');
+    freshbooks_live.client.delete('424911', function(err, response){
+        console.log('recurring dummy client deleted');
         if(err){
             console.log(err);
             res.send(err);
         }
         else{
-            res.send(result);
+            res.send(response);
         }
     })
 })
