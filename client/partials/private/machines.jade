@@ -1,0 +1,6 @@
+div(ng-controller="machineResCtrl" class="contentPane" layout="column" layout-align="center")
+  md-content(layout='column' class="dateItem contentPane")
+    md-button(flex="50" ng-blur="true" ng-repeat="machine in machines" ng-disabled="!machine.online" ng-class="{'md-warn': !machine.online, 'md-primary': machine.online}" ng-click="openCalendar($index, $event)" class="dateItem md-raised")
+      span(class="users") {{machine.toolName}}
+      span(class="users" ng-show="{{machine.online}}") Online
+      span(class="users" ng-hide="{{machine.online}}") Offline

@@ -1,0 +1,26 @@
+div(layout="row")
+  md-sidenav(class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-md')")
+    md-toolbar(class="md-theme-indigo")
+      h1(class="md-toolbar-tools") Options
+    md-content(layout-padding layout="column" class="sideNavPane")
+      md-button(class="md-button" ng-click="logout()" href="/" hide-gt-md) Sign Out
+      md-button(type="button" class="md-button" href="/") Home
+      md-button(type="button" class="md-button" ng-click="userButton('/private/machines.html')") Reserve Machine
+      md-button(type="button" class="md-button" ng-click="userButton('/private/report.html')") Report An Issue
+      md-button(class="md-button" ng-click="userButton('/private/userpage.html')") User Page
+      md-button(ng-click="close()" class="md-button" hide-gt-md) Close
+      
+  md-content(flex layout="column" class="contentPane")
+    md-content(flex layout="column")
+      md-toolbar-tools 
+        div(class="md-toolbar-tools")
+          img(class="wrenchLogo" src="images/Nordeast-Wrench.png" alt="Nordeast Wrench" hide show-gt-md)
+          a(ng-click="toggleLeft()" class="md-primary" hide-gt-md)
+            img(class="wrenchLogo" src="images/Nordeast-Wrench.png" alt="Nordeast Wrench")
+          span(class="flex")
+          div(layout="row" layout-align="center center")
+            md-button(class="navBar item border" ng-click="toggleLeft()") Hello, AngularUser
+            md-button(class="navBar item border" ng-click="logout()" href="/" hide show-gt-md) Sign Out
+      div(ng-include="workPaneUrl")
+
+    

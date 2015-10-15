@@ -1,0 +1,18 @@
+div(ng-controller="reportCtrl" class="contentPane" layout="row" layout-align="center")
+  div(layout="column" class="loginPage")
+    header
+      div(class="login")
+        #reportIssue REPORT AN ISSUE
+        #reminder Please do not try to fix the machine. Thanks!
+    form(layout="column" name="reportForm" class="loginForm")
+      md-input-container(class="inputItem")
+        label(for="reporterEmail") Email
+        input(type="email" name="reporterEmail" id="reporterEmail" ng-model="report.email" aria-label="Email of the person reporting issue")
+      md-input-container(class="inputItem")
+        label(for="machineName") Machine Name
+        input(type="text" name="machineName" id="machineName" ng-model="report.machineName" aria-label="Machine name input")
+      md-input-container(class="inputItem")
+        label(for="issue") What's the issue?
+        textarea(rows="3" cols="3" name="issue" id="issue" ng-model="report.issue" flex="100" aria-label="Issue input")
+      md-content(class="inputItem")
+        input(type="submit" ng-click="" value="Submit Issue" id="submitIssue" class="loginBtn md-button md-raised md-primary")
