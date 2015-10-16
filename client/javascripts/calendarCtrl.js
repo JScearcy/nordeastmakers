@@ -6,6 +6,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   $scope.userId = authService.parseJwt(sessionStorage.getItem('userToken')).id;
   $scope.userType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType;
   var username = authService.parseJwt(sessionStorage.getItem('userToken')).username,
+      accountType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType,
       allReservations = [],
       userReservations = [],
       addedReservations = [],
@@ -43,6 +44,10 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   $scope.addHourToggle = function(clickedHour){
     //first major if - checks if the item exists in the reservation array already - if so remove = true and the other ifs take that into account
     var remove = false;
+    if(clickedHour.userId.length > 0 && clickedHour.userId != $scope.userId && accountType === 'admin'){
+      removedReservations.push(clickedHour);
+      remove = true;
+    };
     if(userReservations.length > 0){
       userReservations.forEach(function(hour, index){
         if(hour.hr === clickedHour.hr){
@@ -98,7 +103,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
         }
       }
     });
-    return console.log('removedReservations: ', removedReservations, '   addedReservations: ', addedReservations);
+    return
   }
 //http post request to send updated reservation array for a given day
   $scope.reserveDate = function() {
