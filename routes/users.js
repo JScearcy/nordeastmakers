@@ -66,6 +66,7 @@ router.post('/', function (req, res) {
                     //if the email doesn't exist in our database then we begin the account creation process
                     //The data variable will store all the info that was sent through the form
                     var data = req.body;
+                    data.username = data.username.toLowerCase();
                     //The email variable will store the users email address
                     var email = data.email;
 
@@ -187,6 +188,25 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
             var user = result;
+            if (req.body.cardNumber) {
+                //!!An empty autobill object will remove autobill information from recurring invoices!!
+                //All fields are required when updating autobill information
+                var auto = {};
+                /*
+                 auto.gateway_name = 'Stripe';
+                 auto.card = {};
+                 auto.card.number = req.body.cardNumber;
+                 auto.card.name = req.body.cardName;
+                 auto.card.expiration = {};
+                 auto.card.expiration.month = req.body.expirationMonth;
+                 auto.card.expiration.year = req.body.expirationYear;
+                 */
+                freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
+                    console.log('recurring invoice updated', response.autobill);
+                    res.sendStatus(200);
+                })
+            }
+
             if (req.body.email) {
                 user.email = req.body.email;
             }
