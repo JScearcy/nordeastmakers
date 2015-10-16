@@ -1,0 +1,11 @@
+form(class="registrationForm")
+  md-input-container(class="inputItem")
+    label(for="cardname") Name on Card
+    input(name="cardname" ng-model="user.cardName" type="text" id="cardname")
+  md-input-container(class="inputItem")
+    label(for="cardnumber") Card Number
+    input(name="cardnumber" ng-model="user.cardNumber" type="text" pattern="[0-9]{13,19}" id="cardnumber")
+  md-input-container(class="inputItem")
+    label(for="expiration") Expiration
+    input(name="expiration" ng-model="user.expiration" type="month" id="expiration")
+  md-button(class="md-primary inputItem" ng-click="saveCard()") Save
