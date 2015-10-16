@@ -5,8 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var expressValidator = require('express-validator');
-var customValidators = require('./modules/custom-validators');
+//var expressValidator = require('express-validator');
+//var customValidators = require('./modules/custom-validators');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -51,9 +51,9 @@ app.use(function (err, req, res, next) {
 app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(expressValidator({
-  customValidators: customValidators
-}));
+//app.use(expressValidator({
+//  customValidators: customValidators
+//}));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
