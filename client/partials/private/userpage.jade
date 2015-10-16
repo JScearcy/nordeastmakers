@@ -1,6 +1,7 @@
-div(ng-controller="userPageCtrl")
+
+div(ng-controller="userPageCtrl" class="loginPage")
   form(class="loginForm" ng-repeat="user in users" layout="column") 
-    p(class="inputItem") {{user.username}}
+    #login.inputItem.login {{user.username}}
     md-input-container(class="inputItem")
       md-select(name='status' id='status' ng-model='user.active' aria-label="Select user status")
         md-option(value="true") Active
