@@ -5,10 +5,12 @@ var Booking = require('../models/booking');
 router.get('/:tool?', function(req, res){
     console.log('listing tools/timeslots already booked', req.params);
     Booking.find({toolId: req.params.tool}, function(err, result){
+        console.log('bookings get route listing booked timeslots for ' + req.params + ': ' + result);
         res.send(result);
     })
 
 });
+
 
 
 router.post('/', function(req, res){
@@ -19,6 +21,7 @@ router.post('/', function(req, res){
             console.log(err);
         }
         else if(booking){
+            console.log('total bookings for ' + req.body.date + ' and tool ' + req.body.toolId +': ' + booking.reservations);
             booking.reservations = req.body.reservations;
             booking.save(function(err, result){
                 if(err){console.log(err)}
