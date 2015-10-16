@@ -1,0 +1,14 @@
+div(ng-controller="scheduledCtrl") 
+    h1 Your Schedule Times
+    h2 Visit Schedule a Machine to schedule time
+    div(ng-repeat="machine in machines")
+      h3
+        span(ng-hide="machine.online") {{machine.toolName}} Offline
+        span(ng-show="machine.online") {{machine.toolName}} Online
+      //- md-content(ng-show="reservation.date" layout="column" class="dateItem contentPane")
+      md-button(ng-repeat="hour in machine.reservations" ng-value="hour" ng-class="{'md-primary': hour.userId == userId, 'md-accent': hour.userId && hour.userId != userId, 'md-warn': !machine.online}" ng-show="user.userId = hour.userId" class="md-raised" aria-label="Hour picker for {{hour.dispTime}}") 
+        span(ng-hide="hour.username.length > 0 || !machine.online") {{hour.dispTime}}
+        span(ng-show="hour.username.length > 0 && machine.online") {{hour.dispTime + ' - ' +hour.username}}
+        span(ng-show="!machine.online") 
+          span(ng-hide="hour.username") Offline 
+          span(ng-show="hour.username") {{hour.username}}
