@@ -2,15 +2,14 @@ var express = require('express');
 var router = express.Router();
 var Booking = require('../models/booking');
 
-router.get('/:tool?', function(req, res){
-    console.log('listing tools/timeslots already booked', req.params);
-    Booking.find({toolId: req.params.tool}, function(err, result){
-        console.log('bookings get route listing booked timeslots for ' + req.params + ': ' + result);
+
+router.get('/:toolId?/:date?', function(req, res){
+  console.log('getting booked timeslots', req.params);
+    Booking.findOne({date: req.params.date, toolId: req.params.toolId}, function(err, result){
+        if(err){console.log(err);}
         res.send(result);
     })
-
-});
-
+})
 
 router.post('/', function(req, res){
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
@@ -18,8 +17,6 @@ router.post('/', function(req, res){
         var check = undefined;
         var tempArray;
         if(err){console.log(err);}
-
-        //if search result empty, create new date object containing reservations of the requested time slots
         if(!result){
             var booking = new Booking(req.body);
             booking.save(function(err, result){
@@ -32,12 +29,10 @@ router.post('/', function(req, res){
                 }
             })
         }
-
-        //if date objects exists, reserve those timeslots that are avaliable and discard the rest
         if(result){
-            console.log('printing previous bookings ', result.reservations);
             tempArray = result.reservations;
             var reqArray = req.body.reservations;
+            //var reqArray = [{hr: 0,userId: 'someuser', reserved: 'true'}, {hr: 3,userId: 'someuser', reserved: 'true'}, {hr: 5,userId: 'someuser', reserved: 'true'}, {hr: 10,userId: 'someuser', reserved: 'true'}, {hr: 17,userId: 'someuser', reserved: 'true'}];
 
             for(i = 0; i < tempArray.length; i++){
                 reqArray.forEach(function(element, index, array){
@@ -64,14 +59,10 @@ router.post('/', function(req, res){
                 })
             }
         }
-
-        //reserve all requested timeslots
         if(result && check==undefined){
             console.log('adding new booking');
-            var book = req.body.reservations;
-            book.forEach(function(element, index, array){
-                tempArray.push(element);
-            })
+            var book = {dispTime: req.body.dispTime, hr: req.body.hr, userId: req.body.userId, reserved: req.body.reserved};
+            tempArray.push(book);
             result.reservations = tempArray;
             result.save(function(err, result){
                 if(err){
@@ -87,18 +78,7 @@ router.post('/', function(req, res){
 })//end post
 
 
-
-router.delete('/', function(req, res){
-    console.log('removing booking ', req.body);
-    Booking.findOneAndRemove({_id: req.body.bookingID}, function(err, doc, result){
-        if(err){
-            console.log('error thrown ', err.message);
-        }
-        else{
-            console.log('booking ' + req.body.bookingID + ' deleted');
-            res.sendStatus(200);
-        }
-    })
-});
-
 module.exports = router;
+
+
+
