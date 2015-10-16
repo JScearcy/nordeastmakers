@@ -5,8 +5,14 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   //initialize the variables used through out the controller
   $scope.userId = authService.parseJwt(sessionStorage.getItem('userToken')).id;
   $scope.userType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType;
-  var username = authService.parseJwt(sessionStorage.getItem('userToken')).username;
-  var allReservations = [];
+  var username = authService.parseJwt(sessionStorage.getItem('userToken')).username,
+      accountType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType,
+      allReservations = [],
+      userReservations = [],
+      addedReservations = [],
+      otherReservations = [],
+      removedReservations = [];
+
   $scope.myDate = new Date();
   $scope.hours = new dayHours();
   //function to close calendar box
@@ -38,20 +44,38 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   $scope.addHourToggle = function(clickedHour){
     //first major if - checks if the item exists in the reservation array already - if so remove = true and the other ifs take that into account
     var remove = false;
-    if($scope.reservation.reservations.length > 0){
-      $scope.reservation.reservations.forEach(function(hour, index){
+    if(clickedHour.userId.length > 0 && clickedHour.userId != $scope.userId && accountType === 'admin'){
+      removedReservations.push(clickedHour);
+      remove = true;
+    };
+    if(userReservations.length > 0){
+      userReservations.forEach(function(hour, index){
         if(hour.hr === clickedHour.hr){
           remove = true;
-          $scope.reservation.reservations.splice(index, 1);
+          removedReservations.push(userReservations.splice(index, 1)[0]);
+          if(addedReservations.length > 0){
+            addedReservations.forEach(function(added, index){
+              if(removedReservations[removedReservations.length - 1].hr == added.hr){
+                addedReservations.splice(index, 1);
+              }
+            })
+          }
+        }
+      })
+    };
+    if(removedReservations.length > 0 && !remove){
+      removedReservations.forEach(function(hour, index){
+        if(hour.hr === clickedHour.hr){
+          removedReservations.splice(index, 1);
         }
       })
     };
     //second major if - if the machine has a max hours and the # of reservations has been met and it isnt a removal then it checks how many the user has in the array
     //it rejects the scheduling if the user would be over their hourly limit
-    if(machine.dailyHours && $scope.reservation.reservations.length >= machine.dailyHours && !remove){
+    if(machine.dailyHours && userReservations.length >= machine.dailyHours && !remove){
       var counter = 0;
       var maxReached = false;
-      $scope.reservation.reservations.forEach(function(reservation, index){
+      userReservations.forEach(function(reservation, index){
         if($scope.userId == reservation.userId){
           counter++;
         }
@@ -71,7 +95,8 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
         if(!remove){
           $scope.hours[index].userId = $scope.userId;
           $scope.hours[index].username = username;
-          $scope.reservation.reservations.push($scope.hours[index]);
+          userReservations.push($scope.hours[index]);
+          addedReservations.push($scope.hours[index]);
         } else if(remove){
           $scope.hours[index].userId = '';
           $scope.hours[index].username = '';
@@ -85,15 +110,32 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       if(!$scope.reservation.toolId){
         return;
       }
+
       var reservation = $scope.reservation;
       reservation.date = momentDates(reservation.date);
-      $http({
-          method: 'POST',
-          url: '/bookings',
-          data: reservation
-      }).then(function(res) {
-        getReservations();
-      });
+
+      if(addedReservations.length > 0){
+        reservation.reservations = addedReservations;
+        $http({
+            method: 'POST',
+            url: '/bookings',
+            data: reservation
+        }).then(function(res) {
+            getReservations();
+        });
+      }
+
+      if(removedReservations.length > 0){
+        reservation.reservations = removedReservations;
+        $http({
+          method: 'DELETE',
+          url:'/bookings',
+          data: reservation,
+          headers: {"Content-Type": "application/json;charset=utf-8"}
+        }).then(function(res){
+          getReservations()
+        });
+      }
   }
 
   //if the date is not in YYYY-MM-DD format it will return it as such
@@ -107,26 +149,29 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
 
   //update the hours for the day selected by the day picker
   function updateHours(reservations) {
-    $scope.reservation.reservations = [];
+    userReservations = [];
+    addedReservations = [];
+    removedReservations = [];
     $scope.hours = new dayHours();
     if(reservations.length > 0) {
       reservations.forEach(function(reservation, index){
-        if(reservation.date == momentDates($scope.reservation.date)) {
-          $scope.reservation.reservations = reservation.reservations;
+        if(reservation.date === momentDates($scope.reservation.date)) {
+          reservation.reservations.forEach(function(reservation, index){
+            if(reservation.username === username){
+              userReservations.push(reservation);
+            } else {
+              otherReservations.push(reservation);
+            }
+            $scope.hours.forEach(function(oldHour, index){
+              if(reservation.hr == oldHour.hr){
+                $scope.hours[index] = reservation;
+              }
+            });
+          });
         }
-      })
+      });
     } else {
       $scope.hours = new dayHours();
-    }
-
-    if($scope.reservation.reservations.length > 0) {
-      $scope.reservation.reservations.forEach(function(hour, index){
-        $scope.hours.forEach(function(oldHour, index){
-          if(hour.hr == oldHour.hr){
-            $scope.hours[index] = hour;
-          }
-        })
-      });
     }
   }
 

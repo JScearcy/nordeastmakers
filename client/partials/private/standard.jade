@@ -19,8 +19,8 @@ div(layout="row")
             img(class="wrenchLogo" src="images/Nordeast-Wrench.png" alt="Nordeast Wrench")
           span(class="flex")
           div(layout="row" layout-align="center center")
-            md-button(class="navBar item border" ng-click="toggleLeft()") Hello, AngularUser
+            md-button(class="navBar item border" ng-click="toggleLeft()") Hello, {{username}}
             md-button(class="navBar item border" ng-click="logout()" href="/" hide show-gt-md) Sign Out
-      div(ng-include="workPaneUrl")
+      div(ng-include="workPaneUrl" class="bgrndMast")
 
     
