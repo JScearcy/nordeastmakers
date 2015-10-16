@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var Freshbooks = require('freshbooksjs');
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
@@ -156,7 +157,7 @@ router.post('/invoice', function(req, res){
 */
 
     var membership = {line: {name: 'Membership', unit_cost: '200', quantity: '1'}};
-    var invoice = {client_id: req.body.client_id, frequency: 'monthly', autobill: auto, lines: membership};
+    var invoice = {client_id: req.body.client_id, frequency: 'monthly', /*autobill: auto,*/ lines: membership};
     freshbooks.recurring.create(invoice, function(err, response){
         if(err) {
           console.log(err);

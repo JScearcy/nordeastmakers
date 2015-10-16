@@ -2,8 +2,6 @@ var express = require('express');
 var router = express.Router();
 //var xml2js = require('xml2js');
 var Freshbooks = require('freshbooksjs');
-
-//var freshbooks = new Freshbooks("https://teamnordeast.freshbooks.com/api/2.1/xml-in", "a5f4b3b560d79f98dfe4a98a058521bc");
 var freshbooks_live = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
 router.get('/', function(req, res, next){
