@@ -31,8 +31,8 @@ router.post('/', function(req, res){
         }
         if(result){
             tempArray = result.reservations;
-            //var reqArray = req.body.reservations;
-            var reqArray = [{hr: 0,userId: 'someuser', reserved: 'true'}, {hr: 3,userId: 'someuser', reserved: 'true'}, {hr: 5,userId: 'someuser', reserved: 'true'}, {hr: 10,userId: 'someuser', reserved: 'true'}, {hr: 17,userId: 'someuser', reserved: 'true'}];
+            var reqArray = req.body.reservations;
+            //var reqArray = [{hr: 0,userId: 'someuser', reserved: 'true'}, {hr: 3,userId: 'someuser', reserved: 'true'}, {hr: 5,userId: 'someuser', reserved: 'true'}, {hr: 10,userId: 'someuser', reserved: 'true'}, {hr: 17,userId: 'someuser', reserved: 'true'}];
 
             for(i = 0; i < tempArray.length; i++){
                 reqArray.forEach(function(element, index, array){

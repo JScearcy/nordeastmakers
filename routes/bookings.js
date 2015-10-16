@@ -12,22 +12,15 @@ router.get('/:tool?', function(req, res){
 });
 
 
-
 router.post('/', function(req, res){
-    console.log('booking tool '+ req.body.toolId + ' on date ' + req.body.date);
+    Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
+        console.log(req.body);
+        var check = undefined;
+        var tempArray;
+        if(err){console.log(err);}
 
-    Booking.findOne({toolId: req.body.toolId, date: req.body.date}, function(err, booking){
-        if(err){
-            console.log(err);
-        }
-        else if(booking){
-            console.log('total bookings for ' + req.body.date + ' and tool ' + req.body.toolId +': ' + booking.reservations);
-            booking.reservations = req.body.reservations;
-            booking.save(function(err, result){
-                if(err){console.log(err)}
-                res.send(result);
-            })
-        }else{
+        //if search result empty, create new date object containing reservations of the requested time slots
+        if(!result){
             var booking = new Booking(req.body);
             booking.save(function(err, result){
                 if(err){
@@ -39,11 +32,64 @@ router.post('/', function(req, res){
                 }
             })
         }
-    })
-});
+
+        //if date objects exists, reserve those timeslots that are avaliable and discard the rest
+        if(result){
+            console.log('printing previous bookings ', result.reservations);
+            tempArray = result.reservations;
+            var reqArray = req.body.reservations;
+
+            for(i = 0; i < tempArray.length; i++){
+                reqArray.forEach(function(element, index, array){
+                    console.log(element.hr);
+                    if(element.hr == tempArray[i].hr){
+                        console.log('timeslot already booked', element.hr, tempArray[i].hr );
+                        reqArray.splice(index, 1);
+                        check = true;
+                    }
+                })
+            }
+            if(check == true){
+                console.log('booking...', reqArray);
+                reqArray.forEach(function(element, index, array){
+                    tempArray.push(element);
+                })
+                console.log('all bookings.. ', tempArray);
+                result.resevations = tempArray;
+                result.save(function(err, result){
+                    if(err){console.log(err);}
+                    else{
+                        res.send(result);
+                    }
+                })
+            }
+        }
+
+        //reserve all requested timeslots
+        if(result && check==undefined){
+            console.log('adding new booking');
+            var book = req.body.reservations;
+            book.forEach(function(element, index, array){
+                tempArray.push(element);
+            })
+            result.reservations = tempArray;
+            result.save(function(err, result){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    res.send(result);
+                }
+            })
+        }
+        console.log(check);
+    })//end findOne
+})//end post
+
+
 
 router.delete('/', function(req, res){
-    console.log('removing booking ', req.body.bookingID);
+    console.log('removing booking ', req.body);
     Booking.findOneAndRemove({_id: req.body.bookingID}, function(err, doc, result){
         if(err){
             console.log('error thrown ', err.message);
