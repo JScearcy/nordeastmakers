@@ -1,0 +1,15 @@
+app.controller('machineAddCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
+  $scope.addMachine = function() {
+    data = $scope.machine;
+    data.online = true;
+    $http({
+      method: 'POST',
+      url: '/tools',
+      data: data
+    }).then(function(res){
+      if(res.status == 200){
+        $scope.machine = {};
+      }
+    });
+  };
+}]);
