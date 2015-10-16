@@ -1,6 +1,11 @@
 md-content(layout="column" class="contentPane")
   md-button(class="md-primary" ng-click="reserveDate()") Save
-  md-datepicker(class="contentPane dateCenter" ng-model="myDate" value="{{myDate}}" md-placeholder="Enter date"
+
+  md-datepicker(class="contentPane dateCenter" ng-model="myDate" ng-change="updateDate(myDate)" ng-value="myDate" md-placeholder="Enter date"
     md-min-date="minDate" md-max-date="maxDate" aria-label="Reservations Date Picker")
-  md-content(ng-show="myDate" ng-model="myDate.hours" layout="column" class="dateItem contentPane")
-    md-button(ng-repeat="hour in hours" ng-value="myDate" class="dateItem md-raised" aria-label="Hour picker for {{hour.dispTime}}") {{hour.dispTime}}
+  md-content(ng-show="reservation.date" layout="column" class="dateItem contentPane")
+    md-button(ng-repeat="hour in hours" ng-value="hour" ng-click="addHourToggle(hour)" ng-disabled="hour.reserved && hour.userId != userId && userType != 'admin'" ng-class="{'md-primary': hour.userId == userId, 'md-accent': hour.userId && hour.userId != userId && userType == 'admin'}" class="dateItem md-raised" aria-label="Hour picker for {{hour.dispTime}}") 
+      span(ng-hide="hour.username.length > 0") {{hour.dispTime}}
+      span(ng-show="hour.username.length > 0") {{hour.dispTime + ' - ' +hour.username}}
+    
+

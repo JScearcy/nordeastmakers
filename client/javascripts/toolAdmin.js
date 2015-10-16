@@ -12,7 +12,7 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
 
   $scope.updateMachine = function(index) {
     var data = $scope.machines[index];
-    console.log(data);
+
     $http({
       method: 'PUT',
       url: '/tools',
@@ -23,6 +23,8 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
       }
     });
   };
+
+
   $scope.deleteMachine = function(index) {
     var data = $scope.machines[index];
     $http({

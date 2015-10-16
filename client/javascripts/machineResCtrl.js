@@ -13,14 +13,19 @@
      }
      getMachines();
      $scope.openCalendar = function(index, ev) {
-       console.log($scope.machines[index]);
+
        $mdDialog.show({
          controller: 'calendarCtrl',
          templateUrl: '/private/calendarDialog.html',
          parent: angular.element(document.body),
          targentEvent: ev,
-         clickOutsideToClose: true
-       })
+
+         clickOutsideToClose: true,
+         locals: {
+           machine: $scope.machines[index]
+         }
+
+       });
        //.then is optional here
      };
  }]);

@@ -26,22 +26,28 @@ app.set('view engine', 'jade');
 
 
 var expressJwt = require('express-jwt');
-app.use('/admin/*', expressJwt({secret: 'supersecret'}), function(req,res,next){
+
+app.use('/admin/*', expressJwt({secret: process.env.SECRET}), function(req,res,next){
+
   if(req.user.accountType === 'admin'){
     next();
   } else {
     res.status(401).send('Not Authorized')
   }
 });
-app.use('/business/*', expressJwt({secret: 'supersecret'}), function(req,res,next){
+
+app.use('/business/*', expressJwt({secret: process.env.SECRET}), function(req,res,next){
+
   if(req.user.accountType === 'business'){
     next();
   } else {
     res.status(401).send('Not Authorized')
   }
 });
-app.use('/private/*', expressJwt({secret: 'supersecret'}));
-app.use('/tools/*', expressJwt({secret: 'supersecret'}));
+
+app.use('/private/*', expressJwt({secret: process.env.SECRET}));
+app.use('/tools/*', expressJwt({secret: process.env.SECRET}));
+
 
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {

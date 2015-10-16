@@ -11,12 +11,7 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
         });
   };
 
-  $scope.reserveMachine = function() {
-    $scope.workPaneUrl = '/private/machines.html';
-  }
-  $scope.reportIssue = function() {
-    $scope.workPaneUrl = '/private/report.html'
-  }
+
   function buildToggler(navID) {
       var debounceFn =  $mdUtil.debounce(function(){
             $mdSidenav(navID)
@@ -33,5 +28,11 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
 
       return authService.logout();
   }
+
+  $scope.userButton = function(url) {
+    $scope.workPaneUrl = url;
+    $scope.close();
+  };
+
 
 }]);

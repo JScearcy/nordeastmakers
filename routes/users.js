@@ -6,10 +6,12 @@ var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
 /* GET users listing. */
-router.get('/:username?', expressJwt({secret: 'supersecret'}), function (req, res) {
+
+router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
   if(req.user.accountType === 'admin' || req.user.username === req.params.username){
+    var username = req.params.username ? {username: req.params.username} : {};
     console.log('finding users in db');
-    User.find(function (err, result) {
+    User.find(username, function (err, result) {
         result.forEach(function(elem, index){
           result[index] = {
             username: elem.username,
@@ -49,7 +51,7 @@ router.post('/', function (req, res) {
         else {
             //if the username is open check to see if the email address is already in the mongo db
             User.findOne({email: req.body.email}, function (err, email) {
-                console.log(req.body.email);
+
                if(err) {
                    console.log('error thrown checking email', err);
                    res.sendStatus(400);
@@ -140,8 +142,21 @@ router.post('/', function (req, res) {
 router.post('/invoice', function(req, res){
     console.log('Creating new recurring invoice for user ', req.body);
 
+    var auto = {};
+
+    //autobill information for live acct. Does not work on teamnordeast acct due lack of Stripe connection
+/*
+    auto.gateway_name = 'Stripe';
+    auto.card = {};
+    auto.card.number = req.body.cardNumber;
+    auto.card.name = req.body.cardName;
+    auto.card.expiration = {};
+    auto.card.expiration.month = req.body.expirationMonth;
+    auto.card.expiration.year = req.body.expirationYear;
+*/
+
     var membership = {line: {name: 'Membership', unit_cost: '200', quantity: '1'}};
-    var invoice = {client_id: req.body.client_id, frequency: 'monthly', lines: membership};
+    var invoice = {client_id: req.body.client_id, frequency: 'monthly', autobill: auto, lines: membership};
     freshbooks.recurring.create(invoice, function(err, response){
         if(err) {
           console.log(err);
@@ -159,14 +174,14 @@ router.post('/invoice', function(req, res){
                     }
                 })
             }
-        })
+        });
         res.sendStatus(200);
     });
 });
 
 
 //update/change acct
-router.put('/', expressJwt({secret: 'supersecret'}), function (req, res) {
+router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     console.log('changing some propterty on this user ', req.body.username);
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
@@ -190,15 +205,20 @@ router.put('/', expressJwt({secret: 'supersecret'}), function (req, res) {
             if (req.body.active) {
                 user.active = req.body.active;
                 var temp;
+                var date = {};
                 if(req.body.active == 'true'){
                     temp = 0;
                 }else {
                     temp = 1;
                 }
+
+                if(req.body.date){
+                    date = req.body.date;
+                }
                 console.log('right here: ', req.body.active, result.recurring_id);
 
             //stop/start recurring invoice based user active status
-                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp }, function(err, response){
+                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
                     console.log('recurring invoice updated', response.stopped);
                 } )
 
@@ -222,7 +242,8 @@ router.put('/', expressJwt({secret: 'supersecret'}), function (req, res) {
 
 
 //delete acct
-router.delete('/', expressJwt({secret: 'supersecret'}), function (req, res) {
+
+router.delete('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     console.log('deleting user ', req.body.username);
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
         User.findOneAndRemove({username: req.body.username}, function (err, doc, result) {

@@ -76,7 +76,11 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                     };
 
                     // return the jwt
+<<<<<<< HEAD
                     var token = jsonwebtoken.sign(user, 'supersecret', {
+=======
+                    var token = jsonwebtoken.sign(user, process.env.SECRET, {
+>>>>>>> 711842b30f3d1fa9e2d8daf5384dc61e7a90e455
 
                         expiresIn: (60 * 60 * 24) // expires in 24 hours
 

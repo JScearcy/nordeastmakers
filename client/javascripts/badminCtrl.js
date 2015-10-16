@@ -26,5 +26,8 @@
 
    $scope.adminButton = function(url) {
      $scope.workPaneUrl = url;
+
+     $scope.close();
+
    };
 }]);

@@ -4,11 +4,11 @@
 app.controller('loginCtrl', ['$scope', '$http', '$location', '$rootScope', 'authService', function($scope, $http, $location, $rootScope, authService){
 
     $scope.login = function(){
+
         $scope.loading = true;
+
         $http.post('/login', $scope.user)
             .then(function (response) {
-                console.log(response, "is the response");
-                $scope.loading = false;
                 sessionStorage.setItem('userToken', response.data);
                 var parsedtoken = authService.parseJwt(response.data);
                 $rootScope.username = parsedtoken.username;
@@ -26,10 +26,10 @@ app.controller('loginCtrl', ['$scope', '$http', '$location', '$rootScope', 'auth
                     default: $location.path("/");
                 }
 
-
             }).finally(function() {
 
                 $scope.loading = false;
+
             });
     };
 }]);
