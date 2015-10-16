@@ -6,7 +6,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
     }).then(function(res){
       $scope.users = res.data;
     });
-  };
+  }
 
   getUsers();
 
