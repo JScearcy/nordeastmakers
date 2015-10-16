@@ -9,7 +9,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtIntercep
 
         jwtInterceptorProvider.tokenGetter = function(){
           return sessionStorage.getItem('userToken');
-        }
+        };
         $httpProvider.interceptors.push('jwtInterceptor');
 
         $routeProvider.
@@ -59,4 +59,4 @@ app.directive('isMatch', function() {
         }
     };
 
-})
+});

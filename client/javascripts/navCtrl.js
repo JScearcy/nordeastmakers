@@ -20,13 +20,13 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
               });
           },200);
       return debounceFn;
-    };
-  $scope.toggleLeft = buildToggler('left')
+    }
+  $scope.toggleLeft = buildToggler('left');
 
   $scope.logout = function() {
 
       return authService.logout();
-  }
+  };
   $scope.userButton = function(url) {
     $scope.workPaneUrl = url;
     $scope.close();
