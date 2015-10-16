@@ -66,6 +66,7 @@ router.post('/', function (req, res) {
                     //if the email doesn't exist in our database then we begin the account creation process
                     //The data variable will store all the info that was sent through the form
                     var data = req.body;
+                    data.username = data.username.toLowerCase();
                     //The email variable will store the users email address
                     var email = data.email;
 
