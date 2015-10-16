@@ -78,6 +78,35 @@ router.post('/', function(req, res){
 })//end post
 
 
+router.delete('/', function(req, res){
+    console.log('deleting....');
+   var reqArray = req.body.reservations;
+   //var reqArray = [{hr: 12}, {hr: 10}, {hr: 13}, {hr: 14}];
+   Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
+       var tempArray;
+       if(result){
+           tempArray = result.reservations;
+
+           for(i=0; i<reqArray.length; i++) {
+               tempArray.forEach(function (element, index, array) {
+                   console.log('booked time slot: ', element.hr, reqArray[i].hr);
+                   if(element.hr == reqArray[i].hr) {
+                       tempArray.splice(index, 1);
+                   }
+               })
+           }
+
+           console.log('temparray :', tempArray);
+           result.reservations = tempArray;
+           result.save(function(err, result){
+               if(err){console.log(err);}
+               res.send(result);
+           })
+       }
+
+   })
+});
+
 module.exports = router;
 
 
