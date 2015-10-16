@@ -87,18 +87,34 @@ router.post('/', function(req, res){
 })//end post
 
 
-
 router.delete('/', function(req, res){
-    console.log('removing booking ', req.body);
-    Booking.findOneAndRemove({_id: req.body.bookingID}, function(err, doc, result){
-        if(err){
-            console.log('error thrown ', err.message);
+    console.log('deleting....');
+    var reqArray = req.body.reservations;
+    //var reqArray = [{hr: 12}, {hr: 10}, {hr: 13}, {hr: 14}];
+    Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
+        var tempArray;
+        if(result){
+            tempArray = result.reservations;
+
+            for(i=0; i<reqArray.length; i++) {
+                tempArray.forEach(function (element, index, array) {
+                    console.log('booked time slot: ', element.hr, reqArray[i].hr);
+                    if(element.hr == reqArray[i].hr) {
+                        tempArray.splice(index, 1);
+                    }
+                })
+            }
+
+            console.log('temparray :', tempArray);
+            result.reservations = tempArray;
+            result.save(function(err, result){
+                if(err){console.log(err);}
+                res.send(result);
+            })
         }
-        else{
-            console.log('booking ' + req.body.bookingID + ' deleted');
-            res.sendStatus(200);
-        }
+
     })
 });
+
 
 module.exports = router;
