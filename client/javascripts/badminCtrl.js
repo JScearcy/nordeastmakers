@@ -20,8 +20,8 @@
                });
            },200);
        return debounceFn;
-     };
-   $scope.toggleLeft = buildToggler('left')
+     }
+   $scope.toggleLeft = buildToggler('left');
 
 
    $scope.adminButton = function(url) {
