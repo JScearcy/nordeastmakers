@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var path = require('path');
 var Freshbooks = require('freshbooksjs');
-var freshbooks = new Freshbooks("https://teamnordeast.freshbooks.com/api/2.1/xml-in", "a5f4b3b560d79f98dfe4a98a058521bc");
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
@@ -34,6 +34,19 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
+    //backend validation for the form to stop the 133t hackers
+    req.checkBody('username', 'Invalid Username').isUsername();
+    req.checkBody('password', 'Invalid Password').isPassword();
+    req.checkBody('first_name', 'Invalid Name').isFirstName();
+    req.checkBody('last_name', 'Invalid Name').isLastName();
+    req.checkBody('phone', 'Invalid Phone Number').isMobile();
+    req.checkBody('email', 'Invalid Email').isEmail();
+    var errors = req.validationErrors();
+    if(errors){
+        req.status(400).send("Form data not valid");
+    }
+
+
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
