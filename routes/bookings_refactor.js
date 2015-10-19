@@ -64,6 +64,7 @@ router.delete('/', function(req, res){
 });
 
 
+
 function spliceArray(a, b){
     console.log('in splicearray');
     for(i=0; i< a.length; i++){

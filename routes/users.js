@@ -35,18 +35,18 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
-    //backend validation for the form to stop the 133t hackers
-    req.checkBody('username', 'Invalid Username').isUsername();
-    req.checkBody('password', 'Invalid Password').isPassword();
-    req.checkBody('first_name', 'Invalid Name').isFirstName();
-    req.checkBody('last_name', 'Invalid Name').isLastName();
-    req.checkBody('phone', 'Invalid Phone Number').isMobile();
-    req.checkBody('email', 'Invalid Email').isEmail();
-    var errors = req.validationErrors();
-    if(errors){
-        req.status(400).send("Form data not valid");
-    }
-
+    ////backend validation for the form to stop the 133t hackers
+    //////req.checkBody('username', 'Invalid Username').isUsername();
+    //////req.checkBody('password', 'Invalid Password').isPassword();
+    //////req.checkBody('first_name', 'Invalid Name').isFirstName();
+    //////req.checkBody('last_name', 'Invalid Name').isLastName();
+    //////req.checkBody('phone', 'Invalid Phone Number').isMobile();
+    //////req.checkBody('email', 'Invalid Email').isEmail();
+    ////var errors = req.validationErrors();
+    //if(errors){
+    //    req.status(400).send("Form data not valid");
+    //}
+    //
 
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {

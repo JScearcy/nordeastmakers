@@ -1,12 +1,15 @@
-form(class="registrationForm")
+form(class="registrationForm" ng-hide="loading" name="form")
   md-input-container(class="inputItem")
     label(for="cardname") Name on Card
-    input(name="cardname" ng-model="user.cardName" type="text" id="cardname")
+    input(name="cardname" ng-model="user.cardName" type="text" id="cardname" pattern="^[a-zA-Z ]*$" required)
   md-input-container(class="inputItem")
     label(for="cardnumber") Card Number
-    input(name="cardnumber" ng-model="user.cardNumber" type="text" pattern="[0-9]{13,19}" id="cardnumber")
+    input(name="cardnumber" ng-model="user.cardNumber" type="text" pattern="[0-9]{13,19}" id="cardnumber" required)
   md-input-container(class="inputItem")
     label(for="expiration") Expiration
-    input(name="expiration" ng-model="user.expiration" type="month" id="expiration")
-  md-button(class="md-primary inputItem" ng-click="saveCard()") Save
+    input(name="expiration" ng-model="user.expiration" type="month" id="expiration" required)
+  md-button(class="md-primary inputItem" ng-disabled="form.$invalid" ng-click="saveCard()") Save
+
+div(layout="row" layout-sm="column" layout-align="space-around")
+  md-progress-circular(md-mode="indeterminate" ng-show="loading")
 

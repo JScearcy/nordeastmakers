@@ -6,3 +6,6 @@ div(ng-controller="machineResCtrl" class="contentPane" layout="column" layout-al
       span(class="users" ng-show="{{machine.online}}") Online
       span(class="users" ng-hide="{{machine.online}}") Offline
 
+div(layout="row" layout-sm="column" layout-align="space-around")
+  md-progress-circular(md-mode="indeterminate" ng-show="loading")
+
