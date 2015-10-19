@@ -67,7 +67,4 @@ app.service('hoursService',['$http', function($http){
     };
     return thisWeek;
   }
-  this.weeklyCounter = function(machines) {
-
-  }
 }]);
