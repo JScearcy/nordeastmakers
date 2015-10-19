@@ -52,7 +52,7 @@ router.post('/free_user', expressJwt({secret: process.env.SECRET}),function(req,
             })
         }
     })
-})
+});
 
 //create new user account
 router.post('/', function (req, res) {
@@ -228,24 +228,26 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
             var user = result;
-            if (req.body.cardNumber) {
-                //!!An empty autobill object will remove autobill information from recurring invoices!!
-                //All fields are required when updating autobill information
-                var auto = {};
-                /*
-                 auto.gateway_name = 'Stripe';
-                 auto.card = {};
-                 auto.card.number = req.body.cardNumber;
-                 auto.card.name = req.body.cardName;
-                 auto.card.expiration = {};
-                 auto.card.expiration.month = req.body.expirationMonth;
-                 auto.card.expiration.year = req.body.expirationYear;
-                 */
-                freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
-                    console.log('recurring invoice updated', response.autobill);
-                    res.sendStatus(200);
-                })
-            }
+
+            //<<<<AUTOBILL INFO DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION COPY>>>>>>>>
+            //if (req.body.cardNumber) {
+            //    //!!An empty autobill object will remove autobill information from recurring invoices!!
+            //    //All fields are required when updating autobill information
+            //    var auto = {};
+            //    /*
+            //     auto.gateway_name = 'Stripe';
+            //     auto.card = {};
+            //     auto.card.number = req.body.cardNumber;
+            //     auto.card.name = req.body.cardName;
+            //     auto.card.expiration = {};
+            //     auto.card.expiration.month = req.body.expirationMonth;
+            //     auto.card.expiration.year = req.body.expirationYear;
+            //     */
+            //    freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
+            //        console.log('recurring invoice updated', response.autobill);
+            //        res.sendStatus(200);
+            //    })
+            //}
 
             if (req.body.email) {
                 user.email = req.body.email;
@@ -276,10 +278,11 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                 }
                 console.log('right here: ', req.body.active, result.recurring_id);
 
+            //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
             //stop/start recurring invoice based user active status
-                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
-                    console.log('recurring invoice updated', response.stopped);
-                } )
+            //    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
+            //        console.log('recurring invoice updated', response.stopped);
+            //    } )
 
             }
             if (req.body.recurring_id) {
@@ -301,10 +304,14 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
 
 //delete acct
-router.delete('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
-    console.log('deleting user ', req.body.username);
-    if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
-        User.findOneAndRemove({username: req.body.username}, function (err, doc, result) {
+router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
+    console.log('deleting user ', req.query.username);
+    var userToDelete = req.query.username;
+    if(req.user.accountType === 'admin' || req.user.username === userToDelete) {
+
+        //we need to also delete the invoice here
+
+        User.findOneAndRemove({username: userToDelete}, function (err, doc, result) {
             if (err) {
                 console.log('error thrown ', err.message);
                 res.sendStatus(200);
