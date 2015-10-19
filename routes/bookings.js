@@ -51,11 +51,10 @@ router.post('/', function(req, res){
 
 
 router.delete('/', function(req, res){
-
-    var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
+    //Remove requsested timeslots from date object's array of reservations
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
-            result.reservations = spliceArray(reqArray, result.reservations);
+            result.reservations = spliceArray(req.body.reservations, result.reservations);
             result.save(function(err, result){
                 if(err){console.log(err);}
                 res.send(result);
