@@ -50,10 +50,8 @@ router.post('/', function(req, res){
 })//end post
 
 
-
-
 router.delete('/', function(req, res){
-
+    console.log("delete booking");
     var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
