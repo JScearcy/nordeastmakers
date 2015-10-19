@@ -107,9 +107,9 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   }
 //http post request to send updated reservation array for a given day
   $scope.reserveDate = function() {
-      $scope.loading = true;
+
       if(!$scope.reservation.toolId){
-        $scope.loading = false;
+
         return;
       }
 
@@ -123,7 +123,6 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
             url: '/bookings',
             data: reservation
         }).then(function(res) {
-            $scope.loading = false;
             getReservations();
         });
       }
