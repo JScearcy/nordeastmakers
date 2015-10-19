@@ -14,7 +14,6 @@ var tools = require('./routes/tools');
 var bookings = require('./routes/bookings');
 var invoices = require('./routes/freshbooks_invoices');
 var business = require('./routes/business');
-var admin = require('./routes/admin');
 var login = require('./routes/login');
 var refactor = require('./routes/bookings_refactor');
 
@@ -75,7 +74,6 @@ mongoose.connection.on('error', function(err){
 app.use('/', routes);
 app.use('/users', users);
 app.use('/business', business);
-app.use('/admin', admin);
 app.use('/tools', tools);
 app.use('/bookings', bookings);
 app.use('/freshbooks_invoices',invoices);
