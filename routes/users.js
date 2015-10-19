@@ -35,6 +35,8 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
+    console.log(req.body);
+    console.log(req.body.username);
     //backend validation for the form to stop the 133t hackers
     req.checkBody('username', 'Invalid Username').isUsername();
     req.checkBody('password', 'Invalid Password').isPassword();
@@ -52,6 +54,7 @@ router.post('/', function (req, res) {
     User.findOne({username: req.body.username}, function (err, user) {
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
         var userExists = false;
+        console.log(user);
 
         if (err) {
             console.log('error thrown ', err);
@@ -80,6 +83,7 @@ router.post('/', function (req, res) {
                     //if the email doesn't exist in our database then we begin the account creation process
                     //The data variable will store all the info that was sent through the form
                     var data = req.body;
+                    console.log(data);
                     data.username = data.username.toLowerCase();
                     //The email variable will store the users email address
                     var email = data.email;
@@ -96,8 +100,9 @@ router.post('/', function (req, res) {
                     };
 
                     //to check to see if they are in freshbooks first we get all the users that exist
-                    freshbooks.client.list(function (error, clients) {
-
+                    freshbooks.client.list(function (err, clients) {
+                        if(err){ console.log('freshbooks error thrown', err)}
+                        console.log(clients);
                         //loop through the users to see if the user signing up exists in Freshbooks by comparing the email addresses
                         clients.forEach(function (elem) {
                             if (elem.email == email) {
@@ -189,7 +194,7 @@ router.post('/invoice', function(req, res){
                     }
                 })
             }
-        })
+        });
         res.sendStatus(200);
     });
 });
@@ -204,7 +209,7 @@ router.post('/addon', function(req, res){
             res.sendStatus(200);
         }
     })
-})
+});
 
 
 //update/change acct
@@ -214,24 +219,26 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
             var user = result;
-            if (req.body.cardNumber) {
-                //!!An empty autobill object will remove autobill information from recurring invoices!!
-                //All fields are required when updating autobill information
-                var auto = {};
-                /*
-                 auto.gateway_name = 'Stripe';
-                 auto.card = {};
-                 auto.card.number = req.body.cardNumber;
-                 auto.card.name = req.body.cardName;
-                 auto.card.expiration = {};
-                 auto.card.expiration.month = req.body.expirationMonth;
-                 auto.card.expiration.year = req.body.expirationYear;
-                 */
-                freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
-                    console.log('recurring invoice updated', response.autobill);
-                    res.sendStatus(200);
-                })
-            }
+
+            //<<<<AUTOBILL INFO DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION COPY>>>>>>>>
+            //if (req.body.cardNumber) {
+            //    //!!An empty autobill object will remove autobill information from recurring invoices!!
+            //    //All fields are required when updating autobill information
+            //    var auto = {};
+            //    /*
+            //     auto.gateway_name = 'Stripe';
+            //     auto.card = {};
+            //     auto.card.number = req.body.cardNumber;
+            //     auto.card.name = req.body.cardName;
+            //     auto.card.expiration = {};
+            //     auto.card.expiration.month = req.body.expirationMonth;
+            //     auto.card.expiration.year = req.body.expirationYear;
+            //     */
+            //    freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
+            //        console.log('recurring invoice updated', response.autobill);
+            //        res.sendStatus(200);
+            //    })
+            //}
 
             if (req.body.email) {
                 user.email = req.body.email;
@@ -262,10 +269,11 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                 }
                 console.log('right here: ', req.body.active, result.recurring_id);
 
+            //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
             //stop/start recurring invoice based user active status
-                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
-                    console.log('recurring invoice updated', response.stopped);
-                } )
+            //    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
+            //        console.log('recurring invoice updated', response.stopped);
+            //    } )
 
             }
             if (req.body.recurring_id) {
@@ -287,10 +295,14 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
 
 //delete acct
-router.delete('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
-    console.log('deleting user ', req.body.username);
-    if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
-        User.findOneAndRemove({username: req.body.username}, function (err, doc, result) {
+router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
+    console.log('deleting user ', req.query.username);
+    var userToDelete = req.query.username;
+    if(req.user.accountType === 'admin' || req.user.username === userToDelete) {
+
+        //we need to also delete the invoice here
+
+        User.findOneAndRemove({username: userToDelete}, function (err, doc, result) {
             if (err) {
                 console.log('error thrown ', err.message);
                 res.sendStatus(200);

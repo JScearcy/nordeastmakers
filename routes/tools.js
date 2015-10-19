@@ -51,7 +51,9 @@ router.post('/', function(req, res){
 //update/change tool
 router.put('/', function(req, res){
     console.log('changing some property on this tool ', req.body.toolName);
+    //find the tool
     Tool.findOne({toolName: req.body.toolName}, function(err, result){
+        //If the tool is found go through all the attributes and update them if they have been inputted
         if(result){
             var tool = result;
             if(req.body.updateName){
@@ -71,7 +73,6 @@ router.put('/', function(req, res){
                 if(err){
                     console.log('error thrown ', err.message);
                 }
-                //console.log('tool ' + tool.toolName + ' updated' );
                 res.sendStatus(200);
             });
         }
@@ -80,6 +81,7 @@ router.put('/', function(req, res){
 
 //delete tool
 router.delete('/:id', function(req, res){
+//find the tool in the database and if it is there delete it
     Tool.findOneAndRemove({_id: req.params.id}, function(err, doc, result){
         if(err){
             console.log('error thrown ', err.message);
