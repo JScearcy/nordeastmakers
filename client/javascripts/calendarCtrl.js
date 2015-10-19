@@ -114,8 +114,6 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       if(!$scope.reservation.toolId){
         return;
       }
-      console.log('Removed:   ',removedReservations);
-      console.log('Added:   ', addedReservations);
       var reservation = $scope.reservation;
       reservation.date = hoursService.momentDates(reservation.date);
 
