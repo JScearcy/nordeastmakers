@@ -68,7 +68,7 @@ mongoose.connect(dbURI);
 mongoose.connection.on('connected', function(){
     console.log('Mongoose default connection is open: ', dbURI);
 });
-mongoose.connection.on('error', function(){
+mongoose.connection.on('error', function(err){
     console.log('Mongoose connection failed with ', err);
 });
 
