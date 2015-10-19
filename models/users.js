@@ -16,6 +16,7 @@ var UserSchema = new mongoose.Schema({
     businessAcctUsers: [String],
     accountType: {type: String},
     accessCode: {type: String},
+    billDate: {type: String},
     active: {type: Boolean, default: true}
 });
 

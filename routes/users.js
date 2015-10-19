@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path');
 var Freshbooks = require('freshbooksjs');
 var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
+var freshbooks = new Freshbooks("https://teamnordeast.freshbooks.com/api/2.1/xml-in", "a5f4b3b560d79f98dfe4a98a058521bc");
+
 var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
@@ -31,6 +33,26 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
     }
 });
 
+
+//create helper or admin accts
+router.post('/free_user', expressJwt({secret: process.env.SECRET}),function(req, res){
+    User.findOne({username: req.body.username}, function(err, user){
+        if(err){console.log(err);}
+        else if(user){
+            console.log('username already exists');
+            res.send(user);
+        }
+        else{
+            var user = new User(req.body);
+            user.save(function(err, respone){
+                if(err){console.log(err);}
+                else{
+                    res.send(response);
+                }
+            })
+        }
+    })
+})
 
 //create new user account
 router.post('/', function (req, res) {
