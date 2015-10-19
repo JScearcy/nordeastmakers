@@ -12,12 +12,13 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
 
   $scope.updateMachine = function(index) {
     var data = $scope.machines[index];
-
+    $scope.loading = true;
     $http({
       method: 'PUT',
       url: '/tools',
       data: data
     }).then(function(res){
+      $scope.loading = false;
       if(res.status == 200){
         getTools();
       }
@@ -26,11 +27,13 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
 
 
   $scope.deleteMachine = function(index) {
+    $scope.loading = true;
     var data = $scope.machines[index];
     $http({
       method: 'DELETE',
       url: '/tools/' + data._id
     }).then(function(res){
+      $scope.loading = false;
       if(res.status == 200){
         getTools();
       }

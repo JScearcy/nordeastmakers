@@ -1,5 +1,7 @@
 div(ng-controller="toolAdminCtrl")
-  div(ng-repeat="machine in machines")
+  div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="loading")
+  div(ng-repeat="machine in machines" ng-hide="loading")
     header
       div(class="login")
         #addMachine Machine
@@ -24,3 +26,6 @@ div(ng-controller="toolAdminCtrl")
       md-input-container(flex="1" class="delItem")
         label(for="delBtn")
         input(type="button" value="X" class="md-button md-raised md-warn" name="delBtn" id="delBtn" ng-click="deleteMachine($index)")
+
+
+

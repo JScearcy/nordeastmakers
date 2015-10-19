@@ -13,7 +13,7 @@ article(class="loginPage")
       input(name="username" ng-model="user.username" type="text" id="username" pattern="^[a-zA-Z0-9!@](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$")
     md-input-container(class="inputItem")
       label(for="password") Password
-      input(name="password" ng-model="user.password" type="password" id="password")
+      input(name="password" ng-model="user.password" type="password" id="password" required)
     md-content(class="inputItem")
       input(type="submit" value="Log In" ng-click="login()" id="loginBtn" ng-disabled="form.$invalid" class="loginBtn md-button md-raised md-primary")
   div(class="registerLink" ng-hide="loading")
