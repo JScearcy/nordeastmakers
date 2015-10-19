@@ -47,7 +47,7 @@ router.put('/', function(req, res){
     })
 });
 
-//delete tool
+//delete report
 router.delete('/:id', function(req, res){
     Report.findOneAndRemove({_id: req.params.id}, function(err, doc, result){
         if(err){
