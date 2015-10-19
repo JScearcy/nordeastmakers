@@ -57,10 +57,21 @@ router.delete('/', function(req, res){
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
             result.reservations = spliceArray(req.body.reservations, result.reservations);
-            result.save(function(err, result){
-                if(err){console.log(err);}
-                res.send(result);
-            })
+            console.log('printing reservations length: ', result.reservations.length);
+            if(result.reservations.length == 0){
+                result.remove(function(err, result){
+                    if(err){console.log(err);}
+                    res.send(result);
+                })
+            }
+            else {
+                result.save(function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.send(result);
+                })
+            }
         }
 
     })
