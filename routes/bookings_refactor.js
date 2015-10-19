@@ -11,12 +11,12 @@ router.get('/:toolId?/:date?', function(req, res){
     })
 })
 
+
 router.post('/', function(req, res){
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
-        console.log(req.body);
-        var check = undefined;
-        var tempArray;
         if(err){console.log(err);}
+
+        //if search result empty, create new date object containing reservations of the requested time slots
         if(!result){
             var booking = new Booking(req.body);
             booking.save(function(err, result){
@@ -29,83 +29,54 @@ router.post('/', function(req, res){
                 }
             })
         }
-        if(result){
-            tempArray = result.reservations;
-            var reqArray = req.body.reservations;
-            //var reqArray = [{hr: 0,userId: 'someuser', reserved: 'true'}, {hr: 3,userId: 'someuser', reserved: 'true'}, {hr: 5,userId: 'someuser', reserved: 'true'}, {hr: 10,userId: 'someuser', reserved: 'true'}, {hr: 17,userId: 'someuser', reserved: 'true'}];
 
-            for(i = 0; i < tempArray.length; i++){
-                reqArray.forEach(function(element, index, array){
-                    console.log(element.hr);
-                    if(element.hr == tempArray[i].hr){
-                        console.log('timeslot already booked', element.hr, tempArray[i].hr );
-                        reqArray.splice(index, 1);
-                        check = true;
-                    }
-                })
-            }
-            if(check == true){
-                console.log('booking...', reqArray);
-                reqArray.forEach(function(element, index, array){
-                    tempArray.push(element);
-                })
-                console.log('all bookings.. ', tempArray);
-                result.resevations = tempArray;
-                result.save(function(err, result){
-                    if(err){console.log(err);}
-                    else{
-                        res.send(result);
-                    }
-                })
-            }
-        }
-        if(result && check==undefined){
-            console.log('adding new booking');
-            var book = {dispTime: req.body.dispTime, hr: req.body.hr, userId: req.body.userId, reserved: req.body.reserved};
-            tempArray.push(book);
-            result.reservations = tempArray;
+        //if date objects exists, reserve those timeslots that are avaliable and discard the rest
+        if(result){
+            req.body.reservations = spliceArray(result.reservations, req.body.reservations);
+            req.body.reservations.forEach(function(element, index, array){
+                result.reservations.push(element);
+            })
+            console.log('all bookings.. ', result.reservations);
             result.save(function(err, result){
-                if(err){
-                    console.log(err);
-                }
+                if(err){console.log(err);}
                 else{
                     res.send(result);
                 }
             })
         }
-        console.log(check);
+
     })//end findOne
 })//end post
 
-
 router.delete('/', function(req, res){
-    console.log('deleting....');
-   var reqArray = req.body.reservations;
-   //var reqArray = [{hr: 12}, {hr: 10}, {hr: 13}, {hr: 14}];
-   Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
-       var tempArray;
-       if(result){
-           tempArray = result.reservations;
 
-           for(i=0; i<reqArray.length; i++) {
-               tempArray.forEach(function (element, index, array) {
-                   console.log('booked time slot: ', element.hr, reqArray[i].hr);
-                   if(element.hr == reqArray[i].hr) {
-                       tempArray.splice(index, 1);
-                   }
-               })
-           }
+    var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
+    Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
+        if(result){
+            result.reservations = spliceArray(reqArray, result.reservations);
+            result.save(function(err, result){
+                if(err){console.log(err);}
+                res.send(result);
+            })
+        }
 
-           console.log('temparray :', tempArray);
-           result.reservations = tempArray;
-           result.save(function(err, result){
-               if(err){console.log(err);}
-               res.send(result);
-           })
-       }
-
-   })
+    })
 });
+
+
+
+function spliceArray(a, b){
+    console.log('in splicearray');
+    for(i=0; i< a.length; i++){
+        b.forEach(function(element,index,array){
+            if(element.hr == a[i].hr){
+                console.log('match: ', element.hr, a[i].hr)
+                b.splice(index, 1);
+            }
+        })
+    }
+    return b;
+}
 
 module.exports = router;
 

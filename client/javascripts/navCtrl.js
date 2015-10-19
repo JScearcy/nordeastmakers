@@ -2,7 +2,7 @@
  * Created by MrComputer on 10/7/15.
  */
 app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$mdUtil', '$log', 'authService', function($scope,$rootScope, $location, $mdSidenav, $mdUtil, $log, authService){
-  $scope.workPaneUrl = '/private/machines.html';
+  $scope.workPaneUrl = '/private/scheduledMachines.html';
 
   $scope.close = function () {
       $mdSidenav('left').close()
