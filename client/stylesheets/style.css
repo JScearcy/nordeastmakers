@@ -5,6 +5,12 @@ html, body {
   font: 14px "Open Sans", Helvetica, Arial, sans-serif;
   font-weight: bold;
 }
+.inline {
+  display: inline;
+}
+md-datepicker {
+  background-color: #bbbdbf;
+}
 .md-toolbar-tools {
   background-color: #3c3c3c;
 }

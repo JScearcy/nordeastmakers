@@ -5,7 +5,8 @@ div(layout="row")
     md-content(layout-padding layout="column" class="sideNavPane")
       md-button(class="md-button" ng-click="logout()" href="/" hide-gt-md) Sign Out
       md-button(type="button" class="md-button" href="/") Home
-      md-button(type="button" class="md-button" ng-click="userButton('/private/machines.html')") Reserve Machine
+      md-button(type="button" class="md-button" ng-click="userButton('/private/scheduledMachines.html')") Reserved Machines
+      md-button(type="button" class="md-button" ng-click="userButton('/private/machines.html')") Schedule a Machine
       md-button(type="button" class="md-button" ng-click="userButton('/private/report.html')") Report An Issue
       md-button(class="md-button" ng-click="userButton('/private/userpage.html')") User Page
       md-button(ng-click="close()" class="md-button" hide-gt-md) Close
