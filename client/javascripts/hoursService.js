@@ -60,10 +60,10 @@ app.service('hoursService',['$http', function($http){
     return new Date(date.setDate(diff));
   }
   this.currentWeek = function(dayPicked){
-    var thisSunday = serviceThis.getSunday(dayPicked);
+    var thisSunday = serviceThis.momentDates(serviceThis.getSunday(dayPicked));
     var thisWeek = [];
     for(var i = 0; i <= 6; i++){
-      thisWeek.push(moment(moment().day(thisSunday + i).format('YYYY-MM-DD')));
+      thisWeek.push(moment(thisSunday).add(i, 'day').format('YYYY-MM-DD'));
     };
     return thisWeek;
   }
