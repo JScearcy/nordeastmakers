@@ -215,6 +215,18 @@ router.post('/invoice', function(req, res){
     });
 });
 
+//create recurring invoice for addtional members on business acct
+router.post('/addon', function(req, res){
+    var addon = {line: {name: 'Add-on Member', unit_cost: '50', quantity: req.body.quantity}};
+    var invoice = {client_id: req.body.client_id, frequency: 'monthly', lines: addon};
+    freshbooks.recurring.create( invoice, function(err, response){
+        if(err){console.log(err);}
+        else{
+            res.sendStatus(200);
+        }
+    })
+})
+
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
