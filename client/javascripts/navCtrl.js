@@ -2,7 +2,7 @@
  * Created by MrComputer on 10/7/15.
  */
 app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$mdUtil', '$log', 'authService', function($scope,$rootScope, $location, $mdSidenav, $mdUtil, $log, authService){
-  $scope.workPaneUrl = '/private/machines.html';
+  $scope.workPaneUrl = '/private/scheduledMachines.html';
 
   $scope.close = function () {
       $mdSidenav('left').close()
@@ -21,14 +21,14 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
               });
           },200);
       return debounceFn;
-    };
-  $scope.toggleLeft = buildToggler('left')
+    }
+  $scope.toggleLeft = buildToggler('left');
 
   $scope.logout = function() {
 
       return authService.logout();
-  }
 
+  };
   $scope.userButton = function(url) {
     $scope.workPaneUrl = url;
     $scope.close();

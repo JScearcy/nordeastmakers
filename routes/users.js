@@ -35,6 +35,19 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
+    //backend validation for the form to stop the 133t hackers
+    req.checkBody('username', 'Invalid Username').isUsername();
+    req.checkBody('password', 'Invalid Password').isPassword();
+    req.checkBody('first_name', 'Invalid Name').isFirstName();
+    req.checkBody('last_name', 'Invalid Name').isLastName();
+    req.checkBody('phone', 'Invalid Phone Number').isMobile();
+    req.checkBody('email', 'Invalid Email').isEmail();
+    var errors = req.validationErrors();
+    if(errors){
+        req.status(400).send("Form data not valid");
+    }
+
+
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
@@ -67,6 +80,7 @@ router.post('/', function (req, res) {
                     //if the email doesn't exist in our database then we begin the account creation process
                     //The data variable will store all the info that was sent through the form
                     var data = req.body;
+                    data.username = data.username.toLowerCase();
                     //The email variable will store the users email address
                     var email = data.email;
 
@@ -188,6 +202,25 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
             var user = result;
+            if (req.body.cardNumber) {
+                //!!An empty autobill object will remove autobill information from recurring invoices!!
+                //All fields are required when updating autobill information
+                var auto = {};
+                /*
+                 auto.gateway_name = 'Stripe';
+                 auto.card = {};
+                 auto.card.number = req.body.cardNumber;
+                 auto.card.name = req.body.cardName;
+                 auto.card.expiration = {};
+                 auto.card.expiration.month = req.body.expirationMonth;
+                 auto.card.expiration.year = req.body.expirationYear;
+                 */
+                freshbooks.recurring.update({recurring_id: result.recurring_id, autobill: auto}, function(err, response){
+                    console.log('recurring invoice updated', response.autobill);
+                    res.sendStatus(200);
+                })
+            }
+
             if (req.body.email) {
                 user.email = req.body.email;
             }

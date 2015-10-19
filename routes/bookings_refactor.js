@@ -2,17 +2,17 @@ var express = require('express');
 var router = express.Router();
 var Booking = require('../models/booking');
 
-router.get('/:tool?', function(req, res){
-    console.log('listing tools/timeslots already booked', req.params);
-    Booking.find({toolId: req.params.tool}, function(err, result){
-        console.log('bookings get route listing booked timeslots for ' + req.params + ': ' + result);
+
+router.get('/:toolId?/:date?', function(req, res){
+  console.log('getting booked timeslots', req.params);
+    Booking.findOne({date: req.params.date, toolId: req.params.toolId}, function(err, result){
+        if(err){console.log(err);}
         res.send(result);
     })
+})
 
-});
 
 router.post('/', function(req, res){
-
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(err){console.log(err);}
 
@@ -28,7 +28,6 @@ router.post('/', function(req, res){
                     res.sendStatus(200);
                 }
             })
-
         }
 
         //if date objects exists, reserve those timeslots that are avaliable and discard the rest
@@ -49,9 +48,6 @@ router.post('/', function(req, res){
     })//end findOne
 })//end post
 
-
-
-
 router.delete('/', function(req, res){
 
     var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
@@ -67,10 +63,14 @@ router.delete('/', function(req, res){
     })
 });
 
+
+
 function spliceArray(a, b){
+    console.log('in splicearray');
     for(i=0; i< a.length; i++){
         b.forEach(function(element,index,array){
             if(element.hr == a[i].hr){
+                console.log('match: ', element.hr, a[i].hr)
                 b.splice(index, 1);
             }
         })
@@ -78,6 +78,7 @@ function spliceArray(a, b){
     return b;
 }
 
-
 module.exports = router;
+
+
 
