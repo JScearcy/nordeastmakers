@@ -89,8 +89,22 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       }
     };
     if(machine.weeklyHours && !remove){
-      var currentWeek = new hoursService.currentWeek($scope.myDate);
-      console.log(currentWeek);
+      var currentWeek = new hoursService.currentWeek(hoursService.momentDates($scope.myDate));
+      counter = addedReservations.length;
+      allReservations.forEach(function(reservation, index){
+        currentWeek.forEach(function(date, index){
+          if(reservation.date == date){
+              reservation.reservations.forEach(function(hour, index){
+                if(hour.userId = $scope.userId){
+                  counter += 1
+                }
+              })
+          }
+        });
+      });
+      if(counter >= machine.weeklyHours){
+        return alert('Max time per week is ' + machine.weeklyHours + ' hours');
+      }
     }
     //third major if - add the user id to the selected button and add it to the reservations array
     $scope.hours.forEach(function(hour, index){
