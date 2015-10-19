@@ -33,27 +33,6 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
     }
 });
 
-
-//create helper or admin accts
-router.post('/free_user', expressJwt({secret: process.env.SECRET}),function(req, res){
-    User.findOne({username: req.body.username}, function(err, user){
-        if(err){console.log(err);}
-        else if(user){
-            console.log('username already exists');
-            res.send(user);
-        }
-        else{
-            var user = new User(req.body);
-            user.save(function(err, respone){
-                if(err){console.log(err);}
-                else{
-                    res.send(response);
-                }
-            })
-        }
-    })
-})
-
 //create new user account
 router.post('/', function (req, res) {
     //backend validation for the form to stop the 133t hackers
