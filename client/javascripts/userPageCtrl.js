@@ -9,6 +9,18 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
     });
   }
   getUser();
+  $scope.updateUser = function() {
+    console
+    $http({
+      method: 'POST',
+      url: '/users',
+      data: $scope.users
+    }).then(function(res){
+      console.log($scope.users);
+      getUser();
+    })
+  }
+
   $scope.openCardUpdate = function(index, ev) {
     $mdDialog.show({
       controller: 'cardUpdateCtrl',

@@ -1,7 +1,7 @@
 /**
  * Created by MrComputer on 10/7/15.
  */
-app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'authService', function($scope, $http, $mdDialog, machine, authService){
+app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'authService', 'hoursService', function($scope, $http, $mdDialog, machine, authService, hoursService){
   //initialize the variables used through out the controller
   $scope.userId = authService.parseJwt(sessionStorage.getItem('userToken')).id;
   $scope.userType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType;
@@ -14,7 +14,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       removedReservations = [];
 
   $scope.myDate = new Date();
-  $scope.hours = new dayHours();
+  $scope.hours = new hoursService.dayHours;
   //function to close calendar box
   $scope.hide = function() {
     $mdDialog.hide();
@@ -112,7 +112,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       }
 
       var reservation = $scope.reservation;
-      reservation.date = momentDates(reservation.date);
+      reservation.date = hoursService.momentDates(reservation.date);
 
       if(addedReservations.length > 0){
         reservation.reservations = addedReservations;
@@ -127,6 +127,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
 
       if(removedReservations.length > 0){
         reservation.reservations = removedReservations;
+        console.log(reservation);
         $http({
           method: 'DELETE',
           url:'/bookings',
@@ -138,24 +139,15 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       }
   }
 
-  //if the date is not in YYYY-MM-DD format it will return it as such
-  function momentDates(date) {
-    if(date.toString().length != 10){
-      return moment(new Date(date)).format('YYYY-MM-DD');
-    } else {
-      return date;
-    }
-  }
-
   //update the hours for the day selected by the day picker
   function updateHours(reservations) {
     userReservations = [];
     addedReservations = [];
     removedReservations = [];
-    $scope.hours = new dayHours();
+    $scope.hours = new hoursService.dayHours();
     if(reservations.length > 0) {
       reservations.forEach(function(reservation, index){
-        if(reservation.date === momentDates($scope.reservation.date)) {
+        if(reservation.date === hoursService.momentDates($scope.reservation.date)) {
           reservation.reservations.forEach(function(reservation, index){
             if(reservation.username === username){
               userReservations.push(reservation);
@@ -171,7 +163,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
         }
       });
     } else {
-      $scope.hours = new dayHours();
+      $scope.hours = new hoursService.dayHours();
     }
   }
 
@@ -194,16 +186,5 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
     $scope.reservation.date = $scope.myDate;
     updateHours(allReservations);
   }
-//this function holds an untouched version of the hours available
-  function dayHours() {
-    var allhours = [{dispTime: '12 AM', hr: 0, reserved: false, userId: '', username: ''}, {dispTime: '1 AM', hr: 1, reserved: false, userId: '', username: ''}, {dispTime: '2 AM', hr: 2, reserved: false, userId: '', username: ''},
-                    {dispTime: '3 AM', hr: 3, reserved: false, userId: '', username: ''}, {dispTime: '4 AM', hr: 4, reserved: false, userId: '', username: ''}, {dispTime: '5 AM', hr: 5, reserved: false, userId: '', username: ''},
-                    {dispTime: '6 AM', hr: 6, reserved: false, userId: '', username: ''}, {dispTime: '7 AM', hr: 7, reserved: false, userId: '', username: ''}, {dispTime: '8 AM', hr: 8, reserved: false, userId: '', username: ''},
-                    {dispTime: '9 AM', hr: 9, reserved: false, userId: '', username: ''}, {dispTime: '10 AM', hr: 10, reserved: false, userId: '', username: ''}, {dispTime: '11 AM', hr: 11, reserved: false, userId: '', username: ''},
-                    {dispTime: '12 PM', hr: 12, reserved: false, userId: '', username: ''}, {dispTime: '1 PM', hr: 13, reserved: false, userId: '', username: ''}, {dispTime: '2 PM', hr: 14, reserved: false, userId: '', username: ''},
-                    {dispTime: '3 PM', hr: 15, reserved: false, userId: '', username: ''}, {dispTime: '4 PM', hr: 16, reserved: false, userId: '', username: ''}, {dispTime: '5 PM', hr: 17, reserved: false, userId: '', username: ''},
-                    {dispTime: '6 PM', hr: 18, reserved: false, userId: '', username: ''}, {dispTime: '7 PM', hr: 19, reserved: false, userId: '', username: ''}, {dispTime: '8 PM', hr: 20, reserved: false, userId: '', username: ''},
-                    {dispTime: '9 PM', hr: 21, reserved: false, userId: '', username: ''}, {dispTime: '10 PM', hr: 22, reserved: false, userId: '', username: ''}, {dispTime: '11 PM', hr: 23, reserved: false, userId: '', username: ''}];
-  return allhours;
-}
+
 }]);
