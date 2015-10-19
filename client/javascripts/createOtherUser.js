@@ -8,7 +8,7 @@ app.controller('createOtherUser', ['$rootScope', '$scope', '$http', '$location',
 
         $rootScope.user = $scope.user;
         $rootScope.user.billDate = '9999-99-99';
-        $http.post('/freeusers', $rootScope.user)
+        $http.post('/free_user', $rootScope.user)
             .then(function(res) {
                   alert('Success');
                   $rootScope.user = {};
