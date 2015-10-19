@@ -53,4 +53,21 @@ app.service('hoursService',['$http', function($http){
     }
     return hours
   }
+  this.getSunday = function(date) {
+    date = new Date(date);
+    var day = date.getDay(),
+        diff = date.getDate() - day;
+    return new Date(date.setDate(diff));
+  }
+  this.currentWeek = function(dayPicked){
+    var thisSunday = serviceThis.getSunday(dayPicked);
+    var thisWeek = [];
+    for(var i = 0; i <= 6; i++){
+      thisWeek.push(moment(moment().day(thisSunday + i).format('YYYY-MM-DD')));
+    };
+    return thisWeek;
+  }
+  this.weeklyCounter = function(machines) {
+
+  }
 }]);
