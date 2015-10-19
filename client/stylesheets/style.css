@@ -8,6 +8,9 @@ html, body {
 .inline {
   display: inline;
 }
+md-datepicker {
+  background-color: #bbbdbf;
+}
 .md-toolbar-tools {
   background-color: #3c3c3c;
 }

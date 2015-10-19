@@ -24,7 +24,6 @@ app.service('hoursService',['$http', function($http){
       method: 'GET',
       url: '/bookings/' + id
     }).then(function(res){
-      console.log(res.data);
       cb(res.data);
     })
   }
@@ -36,19 +35,13 @@ app.service('hoursService',['$http', function($http){
     }
   }
   this.updateHours = function(reservations, date, user) {
-    userReservations = [];
     var hours = new serviceThis.dayHours();
     if(reservations.length > 0) {
       reservations.forEach(function(reservation, index){
         if(reservation.date === serviceThis.momentDates(date)) {
           reservation.reservations.forEach(function(reservation, index){
-            if(reservation.username === user.username){
-              userReservations.push(reservation);
-            } else {
-              otherReservations.push(reservation);
-            }
             hours.forEach(function(oldHour, index){
-              if(reservation.hr == oldHour.hr){
+              if(reservation.hr == oldHour.hr && user.username == reservation.username){
                 hours[index] = reservation;
               }
             });
