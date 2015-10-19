@@ -1,7 +1,7 @@
 /**
  * Created by MrComputer on 10/7/15.
  */
-app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'authService', 'hoursService', function($scope, $http, $mdDialog, machine, authService, hoursService){
+app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'authService', 'hoursService', function($scope, $http, $mdDialog, machine, authService, hoursService, maxmet){
   //initialize the variables used through out the controller
   $scope.userId = authService.parseJwt(sessionStorage.getItem('userToken')).id;
   $scope.userType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType;
@@ -88,6 +88,10 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
         return;
       }
     };
+    if(machine.weeklyHours && !remove){
+      var currentWeek = new hoursService.currentWeek($scope.myDate);
+      console.log(currentWeek);
+    }
     //third major if - add the user id to the selected button and add it to the reservations array
     $scope.hours.forEach(function(hour, index){
       if(hour.hr === clickedHour.hr){
@@ -110,7 +114,6 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       if(!$scope.reservation.toolId){
         return;
       }
-
       var reservation = $scope.reservation;
       reservation.date = hoursService.momentDates(reservation.date);
 
@@ -121,21 +124,30 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
             url: '/bookings',
             data: reservation
         }).then(function(res) {
-            getReservations();
+            if(removedReservations.length > 0){
+              reservation.reservations = removedReservations;
+              $http({
+                method: 'DELETE',
+                url:'/bookings',
+                data: reservation,
+                headers: {"Content-Type": "application/json;charset=utf-8"}
+              }).then(function(res){
+                getReservations()
+              });
+            } else {
+                getReservations();
+            }
         });
-      }
-
-      if(removedReservations.length > 0){
-        reservation.reservations = removedReservations;
-        console.log(reservation);
-        $http({
-          method: 'DELETE',
-          url:'/bookings',
-          data: reservation,
-          headers: {"Content-Type": "application/json;charset=utf-8"}
-        }).then(function(res){
-          getReservations()
-        });
+      } else if(removedReservations.length > 0) {
+          reservation.reservations = removedReservations;
+          $http({
+            method: 'DELETE',
+            url:'/bookings',
+            data: reservation,
+            headers: {"Content-Type": "application/json;charset=utf-8"}
+          }).then(function(res){
+            getReservations()
+          })
       }
   }
 
