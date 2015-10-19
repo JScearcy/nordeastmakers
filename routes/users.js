@@ -33,27 +33,6 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
     }
 });
 
-
-//create helper or admin accts
-router.post('/free_user', expressJwt({secret: process.env.SECRET}),function(req, res){
-    User.findOne({username: req.body.username}, function(err, user){
-        if(err){console.log(err);}
-        else if(user){
-            console.log('username already exists');
-            res.send(user);
-        }
-        else{
-            var user = new User(req.body);
-            user.save(function(err, respone){
-                if(err){console.log(err);}
-                else{
-                    res.send(response);
-                }
-            })
-        }
-    })
-});
-
 //create new user account
 router.post('/', function (req, res) {
     console.log(req.body);
@@ -218,6 +197,18 @@ router.post('/invoice', function(req, res){
         });
         res.sendStatus(200);
     });
+});
+
+//create recurring invoice for addtional members on business acct
+router.post('/addon', function(req, res){
+    var addon = {line: {name: 'Add-on Member', unit_cost: '50', quantity: req.body.quantity}};
+    var invoice = {client_id: req.body.client_id, frequency: 'monthly', lines: addon};
+    freshbooks.recurring.create( invoice, function(err, response){
+        if(err){console.log(err);}
+        else{
+            res.sendStatus(200);
+        }
+    })
 });
 
 
