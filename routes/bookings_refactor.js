@@ -53,7 +53,7 @@ router.delete('/', function(req, res){
     var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
-            result.reservations = spliceArray(reqArray, result.reservations);
+            result.reservations = spliceArray(, result.reservations);
             result.save(function(err, result){
                 if(err){console.log(err);}
                 res.send(result);
@@ -62,7 +62,6 @@ router.delete('/', function(req, res){
 
     })
 });
-
 
 
 function spliceArray(a, b){

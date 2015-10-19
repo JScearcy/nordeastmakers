@@ -14,9 +14,8 @@ var tools = require('./routes/tools');
 var bookings = require('./routes/bookings');
 var invoices = require('./routes/freshbooks_invoices');
 var business = require('./routes/business');
-var admin = require('./routes/admin');
 var login = require('./routes/login');
-var refactor = require('./routes/bookings_refactor');
+//var refactor = require('./routes/bookings_refactor');
 
 var app = express();
 
@@ -81,12 +80,11 @@ mongoose.connection.on('error', function(){
 app.use('/', routes);
 app.use('/users', users);
 app.use('/business', business);
-app.use('/admin', admin);
 app.use('/tools', tools);
 app.use('/bookings', bookings);
 app.use('/freshbooks_invoices',invoices);
 app.use('/login', login);
-app.use('/bookings_refactor', refactor);
+//app.use('/bookings_refactor', refactor);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
