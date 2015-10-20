@@ -253,7 +253,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
             //stop/start recurring invoice based user active status
                 freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
-                    console.log('recurring invoice updated', response.stopped);
+                    //console.log('recurring invoice updated', response.stopped);
                 } )
 
             }

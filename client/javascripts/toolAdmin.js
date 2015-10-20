@@ -1,12 +1,14 @@
 app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
   function getTools(){
+    $scope.loading = false;
   return $http({
     method: 'GET',
     url: '/tools'
     }).then(function(res){
+      $scope.loading = false;
       $scope.machines = res.data;
     });
-  };
+  }
 
   getTools();
 
@@ -38,5 +40,5 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
         getTools();
       }
     })
-  }
+  };
 }]);

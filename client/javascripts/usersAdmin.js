@@ -11,12 +11,14 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
   getUsers();
 
   $scope.updateUser = function(index) {
+    $scope.loading = true;
     var data = $scope.users[index];
     $http({
       method: 'PUT',
       url: '/users',
       data: data
     }).then(function(res){
+
       if(res.status == 200){
         getUsers();
       }
