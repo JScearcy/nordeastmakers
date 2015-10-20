@@ -17,6 +17,7 @@ var business = require('./routes/business');
 var admin = require('./routes/admin');
 var login = require('./routes/login');
 var refactor = require('./routes/bookings_refactor');
+var issues = require('./routes/issue_reporting');
 
 var app = express();
 
@@ -81,6 +82,8 @@ app.use('/bookings', bookings);
 app.use('/freshbooks_invoices',invoices);
 app.use('/login', login);
 app.use('/bookings_refactor', refactor);
+app.use('/issues', issues);
+app.use('/*', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -6,13 +6,14 @@ div(ng-controller="reportCtrl" class="contentPane" layout="row" layout-align="ce
         #reminder Please do not try to fix the machine. Thanks!
     form(layout="column" name="reportForm" class="loginForm")
       md-input-container(class="inputItem")
-        label(for="reporterEmail") Email
-        input(type="email" name="reporterEmail" id="reporterEmail" ng-model="report.email" aria-label="Email of the person reporting issue")
+        label(for="username") Username
+        input(type="text" name="username" id="username" aria-label="Username of reporter" value="{{user.user}}" readonly)
       md-input-container(class="inputItem")
-        label(for="machineName") Machine Name
-        input(type="text" name="machineName" id="machineName" ng-model="report.machineName" aria-label="Machine name input")
+        label(for="machines") Tool
+        md-select(name='machines' id='machines' ng-model='report.toolName' aria-label="Select machine")
+          md-option(ng-repeat="machine in machines") {{machine.toolName}}
       md-input-container(class="inputItem")
         label(for="issue") What's the issue?
-        textarea(rows="3" cols="3" name="issue" id="issue" ng-model="report.issue" flex="100" aria-label="Issue input")
+        textarea(rows="3" cols="3" name="issue" id="issue" ng-model="report.issueReport" flex="100" aria-label="Issue input")
       md-content(class="inputItem")
-        input(type="submit" ng-click="" value="Submit Issue" id="submitIssue" class="loginBtn md-button md-raised md-primary")
+        input(type="submit" ng-click="sendReport()" value="Submit Issue" id="submitIssue" class="loginBtn md-button md-raised md-primary")

@@ -1,15 +1,11 @@
-app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
-  function getTools(){
-  return $http({
-    method: 'GET',
-    url: '/tools'
-    }).then(function(res){
-      $scope.machines = res.data;
-    });
-  };
+app.controller('toolAdminCtrl', ['$scope', '$http', '$location', 'toolService', function($scope, $http, $location, toolService){
+  //function to pull all tools and update the scope
+  function updateMachines(machines){
+    $scope.machines = machines
+  }
 
-  getTools();
-
+  toolService.getTools(updateMachines(machines));
+//if an admin makes a change this will update the tool
   $scope.updateMachine = function(index) {
     var data = $scope.machines[index];
     $http({
@@ -18,11 +14,11 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
       data: data
     }).then(function(res){
       if(res.status == 200){
-        getTools();
+        toolService.getTools(updateMachines(machines));
       }
     });
   };
-  
+//admin tool to delete machine
   $scope.deleteMachine = function(index) {
     var data = $scope.machines[index];
     $http({
@@ -30,8 +26,8 @@ app.controller('toolAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
       url: '/tools/' + data._id
     }).then(function(res){
       if(res.status == 200){
-        getTools();
+        toolService.getTools(updateMachines(machines));
       }
     })
-  }
+  };
 }]);
