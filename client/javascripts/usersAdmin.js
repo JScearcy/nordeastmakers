@@ -5,6 +5,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
     url: '/users'
     }).then(function(res){
       $scope.users = res.data;
+      console.log($scope.users);
     });
   }
 
@@ -18,10 +19,28 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
       url: '/users',
       data: data
     }).then(function(res){
-
+      $scope.loading = false;
       if(res.status == 200){
         getUsers();
       }
     });
   };
+
+  $scope.deleteUser = function(index) {
+    $scope.loading = true;
+    console.log('this is the index on delete ' + index);
+    var deletethem = {'username': $scope.users[index].username};
+    console.log(deletethem);
+    $http({
+      method: 'DELETE',
+      url: '/users',
+      params: deletethem
+    }).then(function(res){
+      $scope.loading = false;
+      if(res.status == 200){
+        getUsers();
+      }
+    });
+  };
+
 }]);

@@ -20,7 +20,7 @@ router.get('/inv', function(req, res){
         console.log('printing clients', response );
         res.send(response);
     })
-})
+});
 
 router.get('/cid/:email?', function(req, res){
     console.log('getting dummy client', req.params);
@@ -29,7 +29,7 @@ router.get('/cid/:email?', function(req, res){
         console.log('printing client by email: ', req.params.email);
         res.send(response);
     })
-})
+});
 
 router.post('/', function(req, res, next){
     var dummy = {};
@@ -91,7 +91,7 @@ router.put('/update', function(req, res){
         console.log('recurring invoice updated', response.stopped);
         res.send(response);
     } )
-})
+});
 
 router.delete('/', function(req,res){
     var inv = {};
@@ -108,7 +108,7 @@ router.delete('/', function(req,res){
             res.send(response);
         }
     })
-})
+});
 
 module.exports = router;
 
