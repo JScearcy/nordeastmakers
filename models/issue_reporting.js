@@ -5,7 +5,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var ReportingSchema = new Schema({
-    userId: { type: String, required: true },
+    username: { type: String, required: true },
     toolName: { type: String, required: true },
     issueReport: { type: String, required: true }
 });

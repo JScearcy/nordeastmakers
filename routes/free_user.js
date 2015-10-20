@@ -27,6 +27,6 @@ router.post('/', expressJwt({secret: process.env.SECRET}),function(req, res){
             })
         }
     })
-})
+});
 
 module.exports = router;

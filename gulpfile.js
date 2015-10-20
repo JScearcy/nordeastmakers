@@ -25,6 +25,7 @@ gulp.task('dev', ['process-js',
                       'process-moment',
                       'process-private-views',
                       'process-admin-views',
+                      'process-angular-smart-table',
                       'process-business-views'],
                       function(){
                         gutil.log('Gulped!');
@@ -53,6 +54,10 @@ gulp.task('process-css', function(){
   .pipe(sourcemaps.write())
   .pipe(gulp.dest('./public/stylesheets'));
 });
+gulp.task('process-angular-smart-table', function(){
+  return gulp.src('./node_modules/angular-smart-table/dist/smart-table.min.*')
+  .pipe(gulp.dest('./public/vendors/angularjs'));
+})
 gulp.task('process-angular', function(){
   return gulp.src('./node_modules/angular/angular.min.*')
   .pipe(gulp.dest('./public/vendors/angularjs'));

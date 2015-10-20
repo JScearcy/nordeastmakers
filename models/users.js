@@ -73,7 +73,9 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                         id: doc.id,
                         first_name: doc.first_name,
                         last_name: doc.last_name,
-                        accountType: doc.accountType
+                        accountType: doc.accountType,
+                        active: doc.active,
+                        billDate: doc.billDate
                     };
 
                     // return the jwt

@@ -1,7 +1,7 @@
 /**
  * Created by MrComputer on 10/7/15.
  */
-var app = angular.module('nordeastMakers', ['ngRoute', 'ngMaterial', 'angular-jwt']);
+var app = angular.module('nordeastMakers', ['ngRoute', 'ngMaterial', 'angular-jwt', 'smart-table']);
 
 app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtInterceptorProvider',
     function ($routeProvider, $locationProvider, $httpProvider, jwtInterceptorProvider) {

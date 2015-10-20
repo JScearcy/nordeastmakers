@@ -8,7 +8,6 @@ router.get('/:tool?', function(req, res){
         console.log('bookings get route listing booked timeslots for ' + req.params + ': ' + result);
         res.send(result);
     })
-
 });
 
 router.post('/', function(req, res){
@@ -36,7 +35,7 @@ router.post('/', function(req, res){
             req.body.reservations = spliceArray(result.reservations, req.body.reservations);
             req.body.reservations.forEach(function(element, index, array){
                 result.reservations.push(element);
-            })
+            });
             console.log('all bookings.. ', result.reservations);
             result.save(function(err, result){
                 if(err){console.log(err);}
@@ -46,8 +45,8 @@ router.post('/', function(req, res){
             })
         }
 
-    })//end findOne
-})//end post
+    });//end findOne
+});//end post
 
 
 router.delete('/', function(req, res){

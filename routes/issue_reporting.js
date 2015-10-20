@@ -5,16 +5,19 @@ var express = require('express');
 var router = express.Router();
 var Report = require('../models/issue_reporting');
 var path = require('path');
+var expressJwt = require('express-jwt');
 
 //Get all reports from the mongo database
-router.get('/', function(req, res){
-    Report.find(function(err, result){
-        res.json(result);
-    });
+router.get('/', expressJwt({secret: process.env.SECRET}), function(req, res){
+    if(req.user.accountType === 'admin'){
+      Report.find(function(err, result){
+          res.json(result);
+      });
+    }
 });
 
 //add report to the mongo database
-router.post('/', function(req, res){
+router.post('/', expressJwt({secret: process.env.SECRET}), function(req, res){
     Report.create(req.body, function(err){
         if(err){
             console.log('report creation error thrown ', err.message);
@@ -27,7 +30,8 @@ router.post('/', function(req, res){
 });
 
 //update/change report
-router.put('/', function(req, res){
+router.put('/', expressJwt({secret: process.env.SECRET}), function(req, res){
+  if(req.user.accountType === 'admin'){
     Report.findOne({userId: req.body.userId}, function(err, result){
         if(result){
             var report = result;
@@ -45,10 +49,11 @@ router.put('/', function(req, res){
             });
         }
     })
+  }
 });
 
-//delete report
-router.delete('/:id', function(req, res){
+router.delete('/:id', expressJwt({secret: process.env.SECRET}), function(req, res){
+  if(req.user.accountType === 'admin'){
     Report.findOneAndRemove({_id: req.params.id}, function(err, doc, result){
         if(err){
             console.log('error thrown ', err.message);
@@ -63,6 +68,7 @@ router.delete('/:id', function(req, res){
             res.sendStatus(200);
         }
     })
+  }
 });
 
 module.exports = router;

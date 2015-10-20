@@ -62,7 +62,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
     $scope.updatePassword = function (index) {
         $scope.loading = true;
         //console.log('this is the index on delete ' + index);
-        var updatethem = {'password': $scope.user.newpassword};
+        var updatethem = {'password': $scope.newpassword};
         console.log(updatethem);
         $http({
             method: 'PUT',

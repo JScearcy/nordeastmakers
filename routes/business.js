@@ -7,7 +7,7 @@ router.get('/business.html', function(req, res){
     res.status(401).send('Not Authorized');
   } else {
     res.sendFile(path.join(__dirname, '../business/business.html'));
-  };
+  }
 });
 
 module.exports = router;
