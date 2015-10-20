@@ -10,13 +10,12 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
   }
   getUser();
   $scope.updateUser = function() {
-    console
     $http({
-      method: 'POST',
+      method: 'PUT',
       url: '/users',
-      data: $scope.users
+      data: $scope.users[0]
     }).then(function(res){
-      console.log($scope.users);
+
       getUser();
     })
   }
