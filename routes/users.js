@@ -180,12 +180,13 @@ router.post('/invoice', function(req, res){
     freshbooks.recurring.create(invoice, function(err, response){
         if(err) {
           console.log(err);
-        };
+        }
         console.log('Recurring invoice created', response);
         User.findOne({client_id: response.client_id }, function(err, user){
             if(err){console.log(err)}
             else{
                 user.recurring_id = response.recurring_id;
+                user.billDate = response.date;
                 user.save(function(err){
                     if(err){console.log(err)}
                     else{
