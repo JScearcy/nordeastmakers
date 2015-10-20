@@ -52,7 +52,6 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function(req, res){
   }
 });
 
-//delete tool
 router.delete('/:id', expressJwt({secret: process.env.SECRET}), function(req, res){
   if(req.user.accountType === 'admin'){
     Report.findOneAndRemove({_id: req.params.id}, function(err, doc, result){

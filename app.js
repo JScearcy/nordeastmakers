@@ -14,10 +14,10 @@ var tools = require('./routes/tools');
 var bookings = require('./routes/bookings');
 var invoices = require('./routes/freshbooks_invoices');
 var business = require('./routes/business');
-var admin = require('./routes/admin');
 var login = require('./routes/login');
 var refactor = require('./routes/bookings_refactor');
 var issues = require('./routes/issue_reporting');
+var free_user = require('./routes/free_user');
 
 var app = express();
 
@@ -69,19 +69,19 @@ mongoose.connect(dbURI);
 mongoose.connection.on('connected', function(){
     console.log('Mongoose default connection is open: ', dbURI);
 });
-mongoose.connection.on('error', function(){
+mongoose.connection.on('error', function(err){
     console.log('Mongoose connection failed with ', err);
 });
 
 app.use('/', routes);
 app.use('/users', users);
 app.use('/business', business);
-app.use('/admin', admin);
 app.use('/tools', tools);
 app.use('/bookings', bookings);
 app.use('/freshbooks_invoices',invoices);
 app.use('/login', login);
 app.use('/bookings_refactor', refactor);
+app.use('/free_user', free_user);
 app.use('/issues', issues);
 app.use('/*', routes);
 

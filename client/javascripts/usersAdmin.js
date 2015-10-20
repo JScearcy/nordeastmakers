@@ -23,4 +23,20 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
       }
     });
   };
+
+  $scope.deleteUser = function(index) {
+    console.log('this is the index on delete ' + index);
+    var deletethem = {'username': $scope.users[index].username};
+    console.log(deletethem);
+    $http({
+      method: 'DELETE',
+      url: '/users',
+      params: deletethem
+    }).then(function(res){
+      if(res.status == 200){
+        getUsers();
+      }
+    });
+  };
+
 }]);
