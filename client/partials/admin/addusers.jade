@@ -5,23 +5,23 @@ article(class="loginPage" ng-controller="createOtherUser")
     form(class="registrationForm" name="adminAddUser")
       md-input-container(class="inputItem")
         label(for="username") Username
-        input(name="username" ng-model="user.username" type="text" id="username" pattern="^[a-zA-Z0-9!@_](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$")
+        input(name="username" ng-model="user.username" type="text" id="username" pattern="^[a-zA-Z0-9!@_](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$" required)
         p(ng-show="adminAddUser.username.$invalid && !adminAddUser.username.$pristine") 6 Character Minimum! Only Letters & Numbers
       md-input-container(class="inputItem")
         label(for="firstname") First Name
-        input(name="firstname" ng-model="user.first_name" type="text" id="firstname" pattern="([a-zA-Z]{2,30}\s*)+")
-        p(ng-show="adminAddUser.firstname.$invalid && !adminAdduser.firstname.$pristine ") Letters Only
+        input(name="firstname" ng-model="user.first_name" type="text" id="firstname" pattern="([a-zA-Z]{2,30}\s*)+" required)
+        p(ng-show="adminAddUser.firstname.$invalid && !adminAddUser.firstname.$pristine") Letters Only
       md-input-container(class="inputItem")
         label(for="lastname") Last Name
-        input(name="lastname" ng-model="user.last_name" type="text" id="lastname" pattern="[a-z A-Z]{2,30}")
-        p(ng-show="adminAddUser.lastname.$invalid && !adminAddUser.lastname.$pristine ") Letters Only
+        input(name="lastname" ng-model="user.last_name" type="text" id="lastname" pattern="[a-z A-Z]{2,30}" required)
+        p(ng-show="adminAddUser.lastname.$invalid && !adminAddUser.lastname.$invalid") Letters Only
       md-input-container(class="inputItem")
         label(for="email") Email Address
-        input(name="email" ng-model="user.email" type="email" id="email" pattern="^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$")
+        input(name="email" ng-model="user.email" type="email" id="email" pattern="^([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)@([0-9a-zA-Z]([-_\\.]*[0-9a-zA-Z]+)*)[\\.]([a-zA-Z]{2,9})$" required)
         p(ng-show="adminAddUser.email.$invalid && !adminAddUser.email.$pristine") Email format required
       md-input-container(class="inputItem")
         label(for="mobile") Phone Number
-        input(name="mobile" ng-model="user.mobile" type="tel" id="mobile" pattern="[0-9]{10}")
+        input(name="mobile" ng-model="user.mobile" type="tel" id="mobile" pattern="[0-9]{10}" required)
         p(ng-show="adminAddUser.mobile.$invalid && !adminAddUser.mobile.$pristine") No Spaces/Dashes, Numbers Only
       md-input-container(class="inputItem")
         label(for="password") Password
@@ -30,12 +30,12 @@ article(class="loginPage" ng-controller="createOtherUser")
         p(ng-show="adminAddUser.password.$invalid && !adminAddUser.password.$pristine") password must be 8-32 characters long
       md-input-container(class="inputItem")
         label(for="verifypassword") Type that Password Again
-        input(name="verifypassword" ng-model="user.verifypassword" type="password" id="verifypassword" is-match="user.password")
+        input(name="verifypassword" ng-model="user.verifypassword" type="password" id="verifypassword" is-match="user.password" required)
         p(ng-show="adminAddUser.$error.isMatch && !adminAddUser.verifypassword.$pristine") Passwords must match
       md-input-container(class="inputItem")
         label(for='accountType') Account Type
-        md-select(name='accountType' id='accountType' ng-model='user.accountType' aria-label="Select type account")
+        md-select(name='accountType' id='accountType' ng-model='user.accountType' aria-label="Select type account" required)
           md-option(value="admin") Admin
           md-option(value="helper") Helper
       md-input-container(class="inputItem")
-        md-button(id="loginBtn" class="loginBtn md-button md-raised md-primary" ng-click="newUser()") Create
+        md-button(id="loginBtn" class="loginBtn md-button md-raised md-primary" ng-disabled='adminAddUser.$invalid' ng-click="newUser()") Create

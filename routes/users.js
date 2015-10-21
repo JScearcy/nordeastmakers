@@ -216,7 +216,7 @@ router.post('/addon', function(req, res){
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
-    console.log('changing some propterty on this user ', req.body.username);
+    console.log('changing some propterty on this user ', req.query);
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {

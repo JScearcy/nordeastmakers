@@ -25,7 +25,7 @@ article(class="loginPage")
       md-input-container(class="inputItem")
         label(for="mobile") Phone Number
         input(name="mobile" ng-model="user.mobile" ng-blur="lostFocus = true" type="tel" id="mobile" pattern="[0-9]{10}" required)
-        p(class="mobileErrMess" ng-show="form.mobile.$invalid && !form.mobile.$pristine && lostFocus") No Spaces, No Dashes, Numbers Only
+        p(class="mobileErrMess" ng-show="form.mobile.$invalid && !form.mobile.$pristine") No Spaces, No Dashes, Numbers Only
       md-input-container(class="inputItem")
         label(for="password") Password
         input(name="password" ng-model="user.password" ng-blur="lostFocus = true" type="password" id="password" required)

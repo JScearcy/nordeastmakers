@@ -51,7 +51,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
             targentEvent: ev,
             clickOutsideToClose: true,
             locals: {
-                //user: user
+                user: $scope.users
             }
         }).then(function (err) {
             console.log(err);
@@ -62,8 +62,9 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
     $scope.updatePassword = function (index) {
         $scope.loading = true;
         //console.log('this is the index on delete ' + index);
-        var updatethem = {'password': $scope.newpassword};
-        console.log(updatethem);
+        console.log($scope.users[index]);
+        var updatethem = {'password': $scope.newpassword, 'id': "uniqueStrng"};
+        console.log(updatethem.password);
         $http({
             method: 'PUT',
             url: '/users',
