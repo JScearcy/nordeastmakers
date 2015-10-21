@@ -16,9 +16,9 @@ router.get('/', function(req, res, next){
 
 
 router.get('/inv', function(req, res){
-    freshbooks_live.recurring.get('00000034195', function(err, response){
+    freshbooks_live.recurring.get('00000000414', function(err, response){
         if(err){console.log(err)}
-        console.log('printing clients', response );
+        console.log('printing clients', response.date, response.stopped );
         res.send(response);
     })
 });
@@ -109,6 +109,8 @@ router.delete('/', function(req,res){
         }
     })
 });
+
+
 
 
 module.exports = router;

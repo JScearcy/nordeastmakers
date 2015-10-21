@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var jsonwebtoken = require('jsonwebtoken');
 var SALT_WORK_FACTOR = 12;
+var Freshbooks = require('freshbooksjs');
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
 var UserSchema = new mongoose.Schema({
 
@@ -68,6 +70,7 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
 
                 // check if the password was a match
                 if (isMatch) {
+
                     var user = {
                         username: doc.username,
                         id: doc.id,
@@ -77,6 +80,22 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                         active: doc.active,
                         billDate: doc.billDate
                     };
+
+                    var id = doc.recurring_id;
+                    console.log('recurring id for stardust', doc.recurring_id);
+                    freshbooks.recurring.get(id, function(err, result){
+
+                            //if((result.stopped == 1 && doc.active == true) || (result.stopped == 0 && doc.active == false)  ){
+                            if(result.stopped != doc.active){
+                            console.log('acct status mismatch');
+                            user.active = result.stopped;
+                            user.active.save(function (err, result){
+
+                            })
+                        }
+
+                    })
+
 
                     // return the jwt
                     var token = jsonwebtoken.sign(user, process.env.SECRET, {
