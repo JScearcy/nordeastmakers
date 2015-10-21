@@ -11,9 +11,10 @@ html, body {
 md-datepicker {
   background-color: #bbbdbf;
 }
-.md-toolbar-tools {
+md-toolbar.md-toolbar-tools, md-sidenav.sidenav, div.smallBack {
   background-color: #3c3c3c;
 }
+
 .bgrndMast {
   background-color: #bbbdbf;
   padding: 0;
@@ -111,7 +112,8 @@ a {
 }
 .sideNavPane {
   height: 100%;
-  min-height: 400px;
+  background-color: #3c3c3c;
+  color: #FFF;
 }
 .contentPane {
   width: 100%;
@@ -126,4 +128,23 @@ a {
 }
 .green {
   background-color: #9cc67e;
+}
+.grayBack {
+  background-color: #bbbdbf;
+}
+.topMargin {
+  margin-top: 50px;
+}
+.ng-scope {
+  height: 100%;
+}
+.table {
+  width: 100%;
+}
+.minMaxHeight {
+  max-height: 570px;
+  min-height: 350px;
+}
+.machineButton {
+  margin: 5px 0 5px auto;
 }
