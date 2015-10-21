@@ -51,10 +51,11 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
             targentEvent: ev,
             clickOutsideToClose: true,
             locals: {
-                user: user
+                //user: user
             }
-        }).then(function (err) {
-            console.log(err);
+        }).then(function (err, data) {
+
+            console.log(data);
         });
         //.then is optional here
     };
@@ -62,8 +63,8 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
     $scope.updatePassword = function (user) {
         $scope.loading = true;
         //console.log('this is the index on delete ' + index);
-        console.log(user);
-        var updatethem = {'password': user.newpassword, 'id': "12312sdflgkjfflkj121"};
+        console.log("this is the user", user);
+        var updatethem = {'password': user.newpassword, 'username': user.username};
         console.log(updatethem.password, updatethem.id);
         $http({
             method: 'PUT',
