@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
     accountType: {type: String},
     accessCode: {type: String},
     billDate: {type: String},
-    active: {type: Boolean, default: true}
+    active: {type: String} //storing the value of the stopped property from freshbooks, not to be interpreted as boolean
 });
 
 UserSchema.pre('save', function (next) {
@@ -85,15 +85,15 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                     console.log('recurring id for stardust', doc.recurring_id);
                     freshbooks.recurring.get(id, function(err, result){
 
-                            //if((result.stopped == 1 && doc.active == true) || (result.stopped == 0 && doc.active == false)  ){
                             if(result.stopped != doc.active){
                             console.log('acct status mismatch');
-                            user.active = result.stopped;
-                            user.active.save(function (err, result){
+                            doc.active = result.stopped;
+                            doc.billDate = result.date;
+                            doc.save(function(err, result){
+                                    if(err){console.log(err);}
+                                })
 
-                            })
-                        }
-
+                            }
                     })
 
 

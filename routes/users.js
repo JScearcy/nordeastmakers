@@ -262,25 +262,15 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             }
             if (req.body.active) {
                 user.active = req.body.active;
-                var temp;
-                var date = {};
-                if(req.body.active == 'true'){
-                    temp = 0;
-                }else {
-                    temp = 1;
+                if(req.body.accountType != 'admin' && req.body.accountType != 'helper'){
+
+                    //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
+                    //stop/start recurring invoice based user active status
+
+                    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: req.body.active /*, date: date */ }, function(err, response){
+                        console.log('recurring invoice updated', response.stopped);
+                    } )
                 }
-
-                if(req.body.date){
-                    date = req.body.date;
-                }
-                console.log('right here: ', req.body.active, result.recurring_id);
-
-            //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
-            //stop/start recurring invoice based user active status
-
-                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
-                    console.log('recurring invoice updated', response.stopped);
-                } )
 
             }
             if (req.body.recurring_id) {
