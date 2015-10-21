@@ -26,15 +26,7 @@ app.config(['$routeProvider', '$locationProvider', '$httpProvider', 'jwtIntercep
                 controller: 'registerCtrl'
             }).
             when('/user', {
-                templateUrl: '/private/standard.html',
-                controller: 'navCtrl'
-            }).
-            when('/admin', {
-                templateUrl: '/admin/admin.html',
-                controller: 'adminCtrl'
-            }).
-            when('/business', {
-                templateUrl: '/business/business.html',
+                templateUrl: '/private/main.html',
                 controller: 'navCtrl'
             }).
             otherwise({
