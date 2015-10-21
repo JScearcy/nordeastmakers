@@ -13,7 +13,7 @@ var expressJwt = require('express-jwt');
 router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
   if(req.user.accountType === 'admin' || req.user.username === req.params.username){
     var username = req.params.username ? {username: req.params.username} : {};
-    console.log('finding users in db');
+    //console.log('finding users in db');
     User.find(username, function (err, result) {
         result.forEach(function(elem, index){
           result[index] = {
@@ -26,7 +26,7 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
             active: elem.active
           }
         });
-        console.log('list of users: ', result);
+        //console.log('list of users: ', result);
         res.json(result)
       });
     } else {
@@ -37,25 +37,26 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 //create new user account
 router.post('/', function (req, res) {
 
-    ////backend validation for the form to stop the 133t hackers
-    //////req.checkBody('username', 'Invalid Username').isUsername();
-    //////req.checkBody('password', 'Invalid Password').isPassword();
-    //////req.checkBody('first_name', 'Invalid Name').isFirstName();
-    //////req.checkBody('last_name', 'Invalid Name').isLastName();
-    //////req.checkBody('phone', 'Invalid Phone Number').isMobile();
-    //////req.checkBody('email', 'Invalid Email').isEmail();
-    ////var errors = req.validationErrors();
-    //if(errors){
-    //    req.status(400).send("Form data not valid");
-    //}
-    //
-
+    //console.log('user post route');
+    //console.log(req.body);
+    console.log(req.body.username);
+    //backend validation for the form to stop the 133t hackers
+    req.checkBody('username', 'Invalid Username').isUsername();
+    req.checkBody('password', 'Invalid Password').isPassword();
+    req.checkBody('first_name', 'Invalid Name').isFirstName();
+    req.checkBody('last_name', 'Invalid Name').isLastName();
+    req.checkBody('phone', 'Invalid Phone Number').isMobile();
+    req.checkBody('email', 'Invalid Email').isEmail();
+    var errors = req.validationErrors();
+    if(errors){
+        req.status(400).send("Form data not valid");
+    }
 
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
         var userExists = false;
-        console.log(user);
+        //console.log(user);
 
         if (err) {
             console.log('error thrown ', err);
@@ -216,7 +217,9 @@ router.post('/addon', function(req, res){
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
+
     console.log('changing some propterty on this user ', req.query);
+
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
@@ -275,10 +278,9 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
             //stop/start recurring invoice based user active status
 
-            //    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
-            //        console.log('recurring invoice updated', response.stopped);
-            //    } )
-
+                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
+                    console.log('recurring invoice updated', response.stopped);
+                } )
 
             }
             if (req.body.recurring_id) {
