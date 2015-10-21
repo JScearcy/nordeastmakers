@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var jsonwebtoken = require('jsonwebtoken');
 var SALT_WORK_FACTOR = 12;
+var Freshbooks = require('freshbooksjs');
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
 var UserSchema = new mongoose.Schema({
 
@@ -68,23 +70,48 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
 
                 // check if the password was a match
                 if (isMatch) {
-                    var user = {
-                        username: doc.username,
-                        id: doc.id,
-                        first_name: doc.first_name,
-                        last_name: doc.last_name,
-                        accountType: doc.accountType,
-                        active: doc.active,
-                        billDate: doc.billDate
-                    };
 
-                    // return the jwt
-                    var token = jsonwebtoken.sign(user, process.env.SECRET, {
+                    //check to see if the user has a recurring invoice
+                    freshbooks.recurring.get(doc.recurring_id, function(error, recurringInv){
+                        if(error) {
+                            console.log(error);
+                            return callback(err);
+                        }
+                        //if they do check to see if it is active
+                        else if(recurringInv) {
+                            if(recurringInv.stopped == 0){
+                                billDate = recurringInv.date;
+                            }
 
-                        expiresIn: (60 * 60 * 24) // expires in 24 hours
+                        }
+
+                        var user = {
+                            username: doc.username,
+                            id: doc.id,
+                            first_name: doc.first_name,
+                            last_name: doc.last_name,
+                            accountType: doc.accountType,
+                            active: doc.active,
+                            billDate: doc.billDate
+                        };
+
+                        // return the jwt
+                        var token = jsonwebtoken.sign(user, process.env.SECRET, {
+
+                            expiresIn: (60 * 60 * 24) // expires in 24 hours
+
+                        });
+
+
+
+                        return callback(null, token, user);
+
+
 
                     });
-                    return callback(null, token, user);
+
+                    //end the check
+
                 }
                 else {
                     return callback(new Error('Invalid username or password.'), null);

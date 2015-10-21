@@ -3,8 +3,6 @@ var router = express.Router();
 var path = require('path');
 var Freshbooks = require('freshbooksjs');
 var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
-var freshbooks = new Freshbooks("https://teamnordeast.freshbooks.com/api/2.1/xml-in", "a5f4b3b560d79f98dfe4a98a058521bc");
-
 var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
