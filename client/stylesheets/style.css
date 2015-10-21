@@ -135,9 +135,6 @@ a {
 .topMargin {
   margin-top: 50px;
 }
-/*.ng-scope {
-  min-height: 100%;
-}*/
 .table {
   width: 100%;
 }
@@ -148,8 +145,8 @@ a {
 .machineButton {
   margin: 5px 0 5px auto;
 }
-@-moz-document url-prefix() {
-  .ng-scope {
-    height: auto;
-  }
+.height100 {
+  height: 100%;
+}
+@media (min-width: 1000px){
 }
