@@ -2,13 +2,25 @@ var express = require('express');
 var router = express.Router();
 var Booking = require('../models/booking');
 
-router.get('/:tool?', function(req, res){
-    console.log('listing tools/timeslots already booked', req.params);
-    Booking.find({toolId: req.params.tool}, function(err, result){
-        console.log('bookings get route listing booked timeslots for ' + req.params + ': ' + result);
-        res.send(result);
+router.get('/:toolId?', function(req, res){
+    console.log('getting booked timeslots', req.params);
+    var today = new Date();
+    today.setDate(today.getDate()-1);
+
+    //retrieve all date objects for given toolId and exclude objects that are in the past
+    Booking.find({toolId: req.params.toolId},function(err, result){
+        var tempArray = [];
+
+        if(err){console.log(err);}
+        result.forEach(function(element, index, array){
+            if(new Date(element.date) > today){
+                tempArray.push(element);
+            }
+        })
+        res.send(tempArray);
     })
-});
+})
+
 
 router.post('/', function(req, res){
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
