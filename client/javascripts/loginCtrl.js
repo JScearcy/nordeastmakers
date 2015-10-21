@@ -11,16 +11,7 @@ app.controller('loginCtrl', ['$scope', '$http', '$location', '$rootScope', 'auth
                 $rootScope.username = parsedtoken.username;
 
                 switch(parsedtoken.accountType) {
-                    case 'standard':
-                        $location.path("/user");
-                        break;
-                    case 'business':
-                        $location.path("/business");
-                        break;
-                    case 'admin':
-                        $location.path("/admin");
-                        break;
-                    default: $location.path("/");
+                    default: $location.path("/user");
                 }
 
 
