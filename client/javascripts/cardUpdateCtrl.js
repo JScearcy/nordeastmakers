@@ -11,12 +11,16 @@ app.controller('cardUpdateCtrl', ['$scope', '$http', 'authService','user', funct
     $scope.user.cardNumber = '';
     $scope.user.cardName = '';
     $scope.user.expiration = '';
+    $scope.loading = true;
     $http({
       method: 'PUT',
       url: '/users',
       data: cardInfo
     }).then(function(res){
+      $scope.loading = false;
       console.log(res);
+    }).finally(function() {
+      $scope.loading = false;
     })
   }
 }]);

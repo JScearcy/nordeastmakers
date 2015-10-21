@@ -126,9 +126,16 @@ a {
 .red {
   background-color: red;
 }
+
 .green {
   background-color: #9cc67e;
 }
+
+.updatePass {
+  width: 50%;
+  margin: 15px 0;
+}
+
 .grayBack {
   background-color: #bbbdbf;
 }
@@ -148,3 +155,4 @@ a {
 .machineButton {
   margin: 5px 0 5px auto;
 }
+

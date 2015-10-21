@@ -1,0 +1,6 @@
+div(ng-controller="machineResCtrl" class="contentPane" layout="row" layout-align="center")
+  md-content(layout="column" class="contentPane")
+    md-datepicker(class="contentPane dateCenter" ng-model="myDate" value="{{myDate}}" md-placeholder="Enter date"
+      md-min-date="minDate" md-max-date="maxDate" aria-label="Reservations Date Picker")
+    md-content(ng-show="myDate" ng-model="myDate.hours" layout="column" class="dateItem contentPane")
+      md-button(ng-repeat="hour in hours" ng-value="myDate" class="dateItem md-raised" aria-label="Hour picker for {{hour}}") {{hour}}
