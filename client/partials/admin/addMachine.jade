@@ -6,13 +6,13 @@ md-content(ng-controller="machineResCtrl" class="contentPane" layout="row" layou
     form(name="addMachineForm" id="addMachineForm" class="loginForm" layout="column")
       md-input-container(class="inputItem")
         label(for="toolName") Machine Name
-        input(type="text" name="toolName" id="toolName" ng-model="machine.toolName")
+        input(type="text" name="toolName" id="toolName" ng-model="addmachine.toolName")
       md-input-container(class="inputItem")
         label(for="dailyHours") Daily Reservable Hours
-        input(type="number" name="dailyHours" id="dailyHours" ng-model="machine.dailyHours")
+        input(type="number" name="dailyHours" id="dailyHours" ng-model="addmachine.dailyHours")
       md-input-container(class="inputItem")
         label(for="weeklyHours") Weekly Reservable Hours
-        input(type="number" name="weeklyHours" id="weeklyHours" ng-model="machine.weeklyHours")
+        input(type="number" name="weeklyHours" id="weeklyHours" ng-model="addmachine.weeklyHours")
       md-input-container(class="inputItem")
         label(for="subBtn")
         input(type="submit" value="Add Machine" class="loginBtn md-button md-raised md-primary" name="subBtn" id="subBtn" ng-click="addMachine()")

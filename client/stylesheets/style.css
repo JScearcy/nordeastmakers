@@ -148,3 +148,8 @@ a {
 .machineButton {
   margin: 5px 0 5px auto;
 }
+@-moz-document url-prefix() {
+  .ng-scope {
+    height: auto;
+  }
+}

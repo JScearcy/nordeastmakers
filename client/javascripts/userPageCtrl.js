@@ -15,7 +15,6 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
       url: '/users',
       data: $scope.users[0]
     }).then(function(res){
-
       getUser();
     })
   }

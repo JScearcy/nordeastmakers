@@ -19,8 +19,8 @@ div(ng-controller="userAdminCtrl")
       md-input-container(class="inputItem" flex)
         label(for='status') Status
         md-select(name='status' id='status' ng-model='user.active' aria-label="Select user status")
-          md-option(value="true") Active
-          md-option(value="false") Disabled
+          md-option(value="0") Active
+          md-option(value="1") Disabled
       md-input-container(class="inputItem" flex)
         label(for="accountType") Account Type
         input(type="text" id="accountType" name="accountType" ng-model="user.accountType" value="{{user.accountType}}" readonly)
