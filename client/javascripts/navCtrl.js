@@ -3,7 +3,8 @@
  */
 app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$mdUtil', '$log', 'authService', function($scope,$rootScope, $location, $mdSidenav, $mdUtil, $log, authService){
   $scope.workPaneUrl = '/private/scheduledMachines.html';
-
+  var user = authService.parseJwt(sessionStorage.getItem('userToken'));
+  $scope.accountType = user.accountType;
   $scope.close = function () {
       $mdSidenav('left').close()
         .then(function () {
