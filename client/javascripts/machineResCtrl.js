@@ -6,6 +6,7 @@
  app.controller('machineResCtrl', ['$scope', '$http', '$location', '$mdDialog', 'authService', 'toolService', function($scope, $http, $location, $mdDialog, authService, toolService){
    var user = authService.parseJwt(sessionStorage.getItem('userToken'));
    $scope.accountType = user.accountType;
+   //open the calendar dialog
      $scope.openCalendar = function(index, ev) {
         $scope.loading = true;
        $mdDialog.show({
@@ -24,6 +25,7 @@
        });
        //.then is optional here
      };
+     //open the add machine dialog
      $scope.addMachineDialog = function(ev) {
        $mdDialog.show({
          templateUrl: '/admin/addMachine.html',
@@ -62,9 +64,10 @@
          }
        })
      };
+     //add machine to machines list
      $scope.addMachine = function() {
-       if(!$scope.machine) return;
-       data = $scope.machine;
+       if(!$scope.addmachine) return;
+       data = $scope.addmachine;
        data.online = true;
        $http({
          method: 'POST',
