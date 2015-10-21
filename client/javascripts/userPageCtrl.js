@@ -10,6 +10,8 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
   }
   getUser();
   $scope.updateUser = function() {
+
+
     $http({
       method: 'PUT',
       url: '/users',
@@ -17,7 +19,7 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
     }).then(function(res){
       getUser();
     })
-  }
+  };
 
   $scope.openCardUpdate = function(index, ev) {
     $mdDialog.show({
@@ -29,7 +31,7 @@ app.controller('userPageCtrl', ['$scope', '$http', '$mdDialog', 'authService', f
       locals: {
         user: user
       }
-    })
+    });
     //.then is optional here
   };
 }]);

@@ -79,6 +79,7 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                     };
 
                     // return the jwt
+
                     var token = jsonwebtoken.sign(user, process.env.SECRET, {
 
                         expiresIn: (60 * 60 * 24) // expires in 24 hours

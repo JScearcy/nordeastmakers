@@ -12,6 +12,7 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
         });
   };
 
+
   function buildToggler(navID) {
       var debounceFn =  $mdUtil.debounce(function(){
             $mdSidenav(navID)
@@ -27,10 +28,12 @@ app.controller('navCtrl', ['$scope','$rootScope','$location', '$mdSidenav', '$md
   $scope.logout = function() {
 
       return authService.logout();
+
   };
   $scope.userButton = function(url) {
     $scope.workPaneUrl = url;
     $scope.close();
   };
+
 
 }]);
