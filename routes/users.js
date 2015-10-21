@@ -33,6 +33,7 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
+    console.log('user post route');
     console.log(req.body);
     console.log(req.body.username);
     //backend validation for the form to stop the 133t hackers
@@ -213,6 +214,7 @@ router.post('/addon', function(req, res){
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
+    console.log('user PUT route');
     console.log('changing some propterty on this user ', req.body.username);
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
@@ -270,9 +272,9 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
             //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
             //stop/start recurring invoice based user active status
-            //    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp , date: date }, function(err, response){
-            //        console.log('recurring invoice updated', response.stopped);
-            //    } )
+                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
+                    console.log('recurring invoice updated', response.stopped);
+                } )
 
             }
             if (req.body.recurring_id) {
