@@ -37,10 +37,11 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 //create new user account
 router.post('/', function (req, res) {
 
-    //console.log('user post route');
+    console.log('user post route', req.body);
     //console.log(req.body);
     console.log(req.body.username);
     //backend validation for the form to stop the 133t hackers
+/*
     req.checkBody('username', 'Invalid Username').isUsername();
     req.checkBody('password', 'Invalid Password').isPassword();
     req.checkBody('first_name', 'Invalid Name').isFirstName();
@@ -51,9 +52,11 @@ router.post('/', function (req, res) {
     if(errors){
         req.status(400).send("Form data not valid");
     }
+*/
 
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
+        console.log('finding user');
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
         var userExists = false;
         //console.log(user);
