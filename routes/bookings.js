@@ -23,6 +23,7 @@ router.get('/:toolId?', function(req, res){
 
 
 router.post('/', function(req, res){
+
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(err){console.log(err);}
 
@@ -38,6 +39,7 @@ router.post('/', function(req, res){
                     res.sendStatus(200);
                 }
             })
+
         }
 
         //if date objects exists, reserve those timeslots that are avaliable and discard the rest
@@ -59,10 +61,10 @@ router.post('/', function(req, res){
 });//end post
 
 
-
-
 router.delete('/', function(req, res){
+
     //Remove requsested timeslots from date object's array of reservations
+
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
             result.reservations = spliceArray(req.body.reservations, result.reservations);
@@ -97,4 +99,6 @@ function spliceArray(a, b){
     return b;
 }
 
+
 module.exports = router;
+

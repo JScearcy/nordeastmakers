@@ -126,19 +126,29 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   }
 //http post request to send updated reservation array for a given day
   $scope.reserveDate = function() {
+      $scope.loading = true;
       if(!$scope.reservation.toolId){
+        $scope.loading = false;
         return;
       }
       var reservation = $scope.reservation;
       reservation.date = hoursService.momentDates(reservation.date);
 
+    //disables loading screen if no reservation made
+      if(addedReservations.length == 0){
+
+          $scope.loading = false;
+        }
+
       if(addedReservations.length > 0){
+
         reservation.reservations = addedReservations;
         $http({
             method: 'POST',
             url: '/bookings',
             data: reservation
         }).then(function(res) {
+            $scope.loading = false;
             if(removedReservations.length > 0){
               reservation.reservations = removedReservations;
               $http({
@@ -147,13 +157,16 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
                 data: reservation,
                 headers: {"Content-Type": "application/json;charset=utf-8"}
               }).then(function(res){
+                $scope.loading = false;
                 getReservations()
               });
             } else {
+                $scope.loading = false;
                 getReservations();
             }
         });
       } else if(removedReservations.length > 0) {
+          $scope.loading = true;
           reservation.reservations = removedReservations;
           $http({
             method: 'DELETE',
@@ -161,6 +174,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
             data: reservation,
             headers: {"Content-Type": "application/json;charset=utf-8"}
           }).then(function(res){
+            $scope.loading =false;
             getReservations()
           })
       }

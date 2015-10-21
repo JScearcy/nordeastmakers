@@ -5,6 +5,7 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
 var BookingSchema = new Schema({
+
     date: { type: String, required: true},
     toolId: { type: String, required: true},
     reservations: { type: Array, required: true}

@@ -1,9 +1,11 @@
 div(ng-controller="userAdminCtrl")
+  div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="loading")
   div(ng-repeat="user in users")
     header
       div(class="login")
         #userAdmin User
-    form(name="addMachineForm" id="addMachineForm" class="loginForm" layout="row" layout-md="column" layout-sm="column")
+    form(name="userStatForm" id="userStatForm" class="loginForm" layout="row" layout-md="column" layout-sm="column")
       md-input-container(class="inputItem" flex)
         label(for="username") Username
         input(type="text" id="username" name="username" ng-model="user.username" value="{{user.username}}" readonly)
@@ -27,6 +29,10 @@ div(ng-controller="userAdminCtrl")
       md-input-container(class="inputItem" flex)
         label(for="subBtn")
         input(type="submit" value="Update" class="loginBtn md-button md-raised md-primary" name="subBtn" id="subBtn" ng-click="updateUser($index)")
-      md-input-container(flex="1" class="delItem")
+      md-input-container(class="inputItem" flex)
+        label(for="updatePass")
+        input(type="button" value="updatePassword" class="updatePass md-button md-raised md-accent" name="updatePass" id="updatePass" ng-click="updatePasswordForm(user)")
+      md-input-container(class="inputItem" flex)
         label(for="delBtn")
         input(type="button" value="X" class="delBtn md-button md-raised md-warn" name="delBtn" id="delBtn" ng-click="deleteUser($index)")
+
