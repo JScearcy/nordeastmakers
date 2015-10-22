@@ -37,10 +37,11 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 //create new user account
 router.post('/', function (req, res) {
 
-    //console.log('user post route');
+    console.log('user post route', req.body);
     //console.log(req.body);
     console.log(req.body.username);
     //backend validation for the form to stop the 133t hackers
+/*
     req.checkBody('username', 'Invalid Username').isUsername();
     req.checkBody('password', 'Invalid Password').isPassword();
     req.checkBody('first_name', 'Invalid Name').isFirstName();
@@ -51,9 +52,11 @@ router.post('/', function (req, res) {
     if(errors){
         req.status(400).send("Form data not valid");
     }
+*/
 
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
+        console.log('finding user');
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
         var userExists = false;
         //console.log(user);
@@ -220,8 +223,10 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     //console.log(req.query);
     console.log('changing some propterty on this user ', req.params);
 
+
     if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
       User.findOne({username: req.query.username}, function (err, result) {
+
         if (result) {
             var user = result;
             console.log("the user found in database", user);
@@ -263,6 +268,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             if (req.query.accessCode) {
                 user.accessCode = req.query.accessCode;
             }
+
             if (req.query.active) {
                 user.active = req.query.active;
                 var temp;
@@ -284,6 +290,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                 //freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
                 //    console.log('recurring invoice updated', response.stopped);
                 //} )
+
 
             }
             //if (req.body.recurring_id) {
@@ -324,6 +331,22 @@ router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function 
                 res.sendStatus(200);
             }
             else {
+
+                if(doc.accountType != 'admin' && doc.accountType != 'helper') {
+                    console.log('removing recurring invoice');
+                    freshbooks.recurring.delete(doc.recurring_id, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                    console.log('removing client');
+                    freshbooks.client.delete(doc.client_id, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+
                 console.log('user ' + doc + ' deleted');
                 res.sendStatus(200);
             }

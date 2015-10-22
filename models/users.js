@@ -2,6 +2,8 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var jsonwebtoken = require('jsonwebtoken');
 var SALT_WORK_FACTOR = 12;
+var Freshbooks = require('freshbooksjs');
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
 var UserSchema = new mongoose.Schema({
 
@@ -17,7 +19,7 @@ var UserSchema = new mongoose.Schema({
     accountType: {type: String},
     accessCode: {type: String},
     billDate: {type: String},
-    active: {type: Boolean, default: true}
+    active: {type: String} //storing the value of the stopped property from freshbooks, not to be interpreted as boolean
 });
 
 UserSchema.pre('save', function (next) {
@@ -68,6 +70,7 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
 
                 // check if the password was a match
                 if (isMatch) {
+
                     var user = {
                         username: doc.username,
                         id: doc.id,
@@ -77,6 +80,26 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                         active: doc.active,
                         billDate: doc.billDate
                     };
+
+                    if(user.accountType != 'admin' && user.accountType != 'helper'){
+                        var id = doc.recurring_id;
+                        console.log('recurring id for stardust', doc.recurring_id);
+                        freshbooks.recurring.get(id, function(err, result){
+
+                            if(result.stopped != doc.active){
+                                console.log('acct status mismatch');
+                                doc.active = result.stopped;
+                                doc.billDate = result.date;
+                                doc.save(function(err, result){
+                                    if(err){console.log(err);}
+                                })
+
+                            }
+                        })
+
+                    }
+
+
 
                     // return the jwt
 

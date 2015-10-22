@@ -126,35 +126,26 @@ a {
 .red {
   background-color: red;
 }
-
 .green {
   background-color: #9cc67e;
 }
-
-.updatePass {
-  width: 50%;
-  margin: 15px 0;
-}
-
 .grayBack {
   background-color: #bbbdbf;
 }
 .topMargin {
   margin-top: 50px;
 }
-.ng-scope {
-  height: 100%;
-}
 .table {
   width: 100%;
 }
 .minMaxHeight {
   max-height: 570px;
-  min-height: 350px;
+  min-height: 550px;
 }
 .machineButton {
   margin: 5px 0 5px auto;
 }
+
 
 th {
   padding: 10px;
@@ -169,3 +160,9 @@ td {
 }
 
 table thead th { border-bottom: 3px solid #000; }
+
+.height100 {
+  height: 100%;
+}
+@media (min-width: 1000px){
+}

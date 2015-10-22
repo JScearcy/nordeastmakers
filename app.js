@@ -12,7 +12,6 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var tools = require('./routes/tools');
 var bookings = require('./routes/bookings');
-var invoices = require('./routes/freshbooks_invoices');
 var business = require('./routes/business');
 var login = require('./routes/login');
 
@@ -85,7 +84,6 @@ app.use('/users', users);
 app.use('/business', business);
 app.use('/tools', tools);
 app.use('/bookings', bookings);
-app.use('/freshbooks_invoices',invoices);
 app.use('/login', login);
 app.use('/bookings_refactor', refactor);
 app.use('/free_user', free_user);
