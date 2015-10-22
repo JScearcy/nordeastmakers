@@ -6,6 +6,7 @@ div(ng-controller="adminReportCtrl")
         th(st-sort="username") Username
         th(st-sort="toolName") Tool Name
         th(st-sort="issue") Issue
+
     tbody
       tr(ng-repeat="issue in issues")
         td {{issue.username}}

@@ -156,3 +156,16 @@ a {
   margin: 5px 0 5px auto;
 }
 
+th {
+  padding: 10px;
+  text-align: center;
+
+}
+
+td {
+
+  padding: 20px;
+  text-align: center;
+}
+
+table thead th { border-bottom: 3px solid #000; }
