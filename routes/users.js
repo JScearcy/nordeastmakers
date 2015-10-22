@@ -218,13 +218,13 @@ router.post('/addon', function(req, res){
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     //console.log(req.query);
-    console.log('changing some propterty on this user ', req.query);
+    console.log('changing some propterty on this user ', req.params);
 
     if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
       User.findOne({username: req.query.username}, function (err, result) {
         if (result) {
             var user = result;
-            console.log(user);
+            console.log("the user found in database", user);
 
             //<<<<AUTOBILL INFO DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION COPY>>>>>>>>
             //if (req.body.cardNumber) {
@@ -245,7 +245,9 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             //        res.sendStatus(200);
             //    })
             //}
-
+            if (req.query.password) {
+                user.password = req.query.password;
+            }
             if (req.query.email) {
                 user.email = req.query.email;
             }
