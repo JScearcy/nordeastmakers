@@ -71,20 +71,6 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                 // check if the password was a match
                 if (isMatch) {
 
-                    //check to see if the user has a recurring invoice
-                    freshbooks.recurring.get(doc.recurring_id, function(error, recurringInv){
-                        if(error) {
-                            console.log(error);
-                            return callback(err);
-                        }
-                        //if they do check to see if it is active
-                        else if(recurringInv) {
-                            if(recurringInv.stopped == 0){
-                                billDate = recurringInv.date;
-                            }
-
-                        }
-
                         var user = {
                             username: doc.username,
                             id: doc.id,
@@ -105,12 +91,6 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
 
 
                         return callback(null, token, user);
-
-
-
-                    });
-
-                    //end the check
 
                 }
                 else {
