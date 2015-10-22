@@ -81,20 +81,24 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                         billDate: doc.billDate
                     };
 
-                    var id = doc.recurring_id;
-                    console.log('recurring id for stardust', doc.recurring_id);
-                    freshbooks.recurring.get(id, function(err, result){
+                    if(user.accountType != 'admin' && user.accountType != 'helper'){
+                        var id = doc.recurring_id;
+                        console.log('recurring id for stardust', doc.recurring_id);
+                        freshbooks.recurring.get(id, function(err, result){
 
                             if(result.stopped != doc.active){
-                            console.log('acct status mismatch');
-                            doc.active = result.stopped;
-                            doc.billDate = result.date;
-                            doc.save(function(err, result){
+                                console.log('acct status mismatch');
+                                doc.active = result.stopped;
+                                doc.billDate = result.date;
+                                doc.save(function(err, result){
                                     if(err){console.log(err);}
                                 })
 
                             }
-                    })
+                        })
+
+                    }
+
 
 
                     // return the jwt
