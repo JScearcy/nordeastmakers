@@ -1,4 +1,6 @@
 div(ng-controller="userAdminCtrl")
+  md-content(ng-hide="accountType != 'admin'" class="bgrndMast ")
+    md-button(class="machineButton md-primary md-raised" ng-click="addUser($event)") Add User
   div(layout="row" layout-sm="column" layout-align="space-around")
     md-progress-circular(md-mode="indeterminate" ng-show="loading")
   div(ng-repeat="user in users")
@@ -35,4 +37,3 @@ div(ng-controller="userAdminCtrl")
       md-input-container(class="inputItem" flex)
         label(for="delBtn")
         input(type="button" value="X" class="delBtn md-button md-raised md-warn" name="delBtn" id="delBtn" ng-click="deleteUser($index)")
-

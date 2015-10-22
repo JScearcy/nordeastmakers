@@ -3,14 +3,13 @@ div(layout="row" class="height100")
     md-toolbar(class="md-toolbar-tools")
       img(class="wrenchLogo" src="images/Nordeast-Wrench.png" alt="Nordeast Wrench")
     md-content(layout-padding layout="column" class="sideNavPane")
-      md-button(class="md-button" ng-click="" href="/") Sign Out
-      md-button(class="md-button" ng-show="accountType == 'admin'" ng-click="userButton('/admin/addusers.html')") Add User
-      md-button(class="md-button" ng-show="accountType == 'admin'" ng-click="userButton('/admin/reports.html')") Machine Issues
+      md-button(class="md-button" ng-click="userButton('/private/scheduledMachines.html')") Home
       md-button(class="md-button" ng-click="userButton('/private/toolAdmin.html')") Machines
-      md-button(class="md-button" ng-click="userButton('/private/scheduledMachines.html')") Times Reserved
-      md-button(class="md-button" ng-click="userButton('/private/userpage.html')") User Page
-      md-button(class="md-button" ng-click="userButton('/private/report.html')") Report An Issue
+      md-button(class="md-button" ng-click="userButton('/private/userpage.html')") My Account
+      md-button(class="md-button" ng-hide="accountType == 'admin'" ng-click="userButton('/private/report.html')") Report An Issue
+      md-button(class="md-button" ng-show="accountType == 'admin'" ng-click="userButton('/admin/reports.html')") Issue Reports
       md-button(class="md-button" ng-show="accountType == 'admin'" ng-click="userButton('/admin/usersAdmin.html')") Users
+      md-button(class="md-button" ng-click="" href="/") Sign Out
       md-button(ng-click="close()" class="md-button" hide-gt-md) Close
   div(layout="row" class="contentPane" hide show-gt-md layout-align="center")
     div(ng-include="workPaneUrl" hide show-gt-md)
