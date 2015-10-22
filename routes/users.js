@@ -223,15 +223,8 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     //console.log(req.query);
     console.log('changing some propterty on this user ', req.params);
 
-// <<<<<<< HEAD
-//     console.log('changing some propterty on this user ', req.user);
-//
-//     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
-//       User.findOne({username: req.body.username}, function (err, result) {
-// =======
     if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
       User.findOne({username: req.query.username}, function (err, result) {
-// >>>>>>> a07d15f60b7e8b1f393b392a300f8d39bcecf207
         if (result) {
             var user = result;
             console.log("the user found in database", user);
