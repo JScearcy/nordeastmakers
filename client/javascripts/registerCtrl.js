@@ -7,37 +7,44 @@ app.controller('registerCtrl', ['$rootScope', '$scope', '$http', '$location', fu
   //take first page and add to rootscope user
   $scope.userInfo = function(){
 
-      if($scope.user.password === $scope.user.verifypassword) {
+
+        $scope.loading = true;
 
         $rootScope.user = $scope.user;
         console.log('entered', $rootScope.user );
 
         $http.post('/users', $rootScope.user)
             .then(function(res) {
+
+                $scope.loading = false;
+
                 console.log(res);
                 if(res.data.userexists){
                     $location.path("/");
                     $rootScope.user = {};
                 }else{
-                    //please do not delete
+
+                    //please do not delet
                     $rootScope.user.client_id = res.data.client_id;
                     $location.path("/register2");
                 }
+
+
+            }).finally(function() {
+
+                $scope.loading = false;
 
             });
 
         $scope.user = {};
 
-    }else {
-
-
-    }
-
-
   };
 
   //finish registration and delete rootscope user, route back to login
   $scope.signUp = function() {
+
+    $scope.loading = true;
+
     $rootScope.user.accountType = $scope.user.accountType
     $rootScope.user.cardName = $scope.user.cardName;
     $rootScope.user.cardNumber = $scope.user.cardNumber;
@@ -48,6 +55,9 @@ app.controller('registerCtrl', ['$rootScope', '$scope', '$http', '$location', fu
 
     $http.post('/users/invoice', $rootScope.user)
         .then(function(res) {
+
+            $scope.loading = false;
+
             if(res.data.userexists){
                 $location.path("/");
                 $rootScope.user = {};
@@ -55,6 +65,10 @@ app.controller('registerCtrl', ['$rootScope', '$scope', '$http', '$location', fu
                 $location.path("/");
                 $rootScope.user = {};
             }
+
+
+        }).finally(function() {
+            $scope.loading = false;
 
         });
 

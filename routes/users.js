@@ -7,10 +7,11 @@ var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
 /* GET users listing. */
+
 router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
   if(req.user.accountType === 'admin' || req.user.username === req.params.username){
     var username = req.params.username ? {username: req.params.username} : {};
-    console.log('finding users in db');
+    //console.log('finding users in db');
     User.find(username, function (err, result) {
         result.forEach(function(elem, index){
           result[index] = {
@@ -23,7 +24,7 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
             active: elem.active
           }
         });
-        console.log('list of users: ', result);
+        //console.log('list of users: ', result);
         res.json(result)
       });
     } else {
@@ -33,8 +34,9 @@ router.get('/:username?', expressJwt({secret: process.env.SECRET}), function (re
 
 //create new user account
 router.post('/', function (req, res) {
-    console.log('user post route');
-    console.log(req.body);
+
+    //console.log('user post route');
+    //console.log(req.body);
     console.log(req.body.username);
     //backend validation for the form to stop the 133t hackers
     req.checkBody('username', 'Invalid Username').isUsername();
@@ -48,12 +50,11 @@ router.post('/', function (req, res) {
         req.status(400).send("Form data not valid");
     }
 
-
     //check to see if username already exists
     User.findOne({username: req.body.username}, function (err, user) {
         //Initialize the userExists variable to false- this is so the front end knows where to send the user after they sign up depending on if they are in Freshbooks or not
         var userExists = false;
-        console.log(user);
+        //console.log(user);
 
         if (err) {
             console.log('error thrown ', err);
@@ -67,7 +68,7 @@ router.post('/', function (req, res) {
         else {
             //if the username is open check to see if the email address is already in the mongo db
             User.findOne({email: req.body.email}, function (err, email) {
-                console.log(email);
+
                if(err) {
                    console.log('error thrown checking email', err);
                    res.sendStatus(400);
@@ -175,7 +176,7 @@ router.post('/invoice', function(req, res){
 */
 
     var membership = {line: {name: 'Membership', unit_cost: '200', quantity: '1'}};
-    var invoice = {client_id: req.body.client_id, frequency: 'monthly', autobill: auto, lines: membership};
+    var invoice = {client_id: req.body.client_id, frequency: 'monthly', /*autobill: auto,*/ lines: membership};
     freshbooks.recurring.create(invoice, function(err, response){
         if(err) {
           console.log(err);
@@ -214,8 +215,9 @@ router.post('/addon', function(req, res){
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
-    console.log('user PUT route');
-    console.log('changing some propterty on this user ', req.body.username);
+
+    console.log('changing some propterty on this user ', req.query);
+
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
         if (result) {
@@ -258,23 +260,15 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             }
             if (req.body.active) {
                 user.active = req.body.active;
-                var temp;
-                var date = {};
-                if(req.body.active == 'true'){
-                    temp = 0;
-                }else {
-                    temp = 1;
-                }
-                if(req.body.date){
-                    date = req.body.date;
-                }
-                console.log('right here: ', req.body.active, result.recurring_id);
+                if(req.body.accountType != 'admin' && req.body.accountType != 'helper'){
 
-            //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
-            //stop/start recurring invoice based user active status
-                freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
-                    console.log('recurring invoice updated', response.stopped);
-                } )
+                    //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
+                    //stop/start recurring invoice based user active status
+
+                    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: req.body.active /*, date: date */ }, function(err, response){
+                        console.log('recurring invoice updated', response.stopped);
+                    } )
+                }
 
             }
             if (req.body.recurring_id) {
@@ -296,6 +290,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
 
 //delete acct
+
 router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function (req, res) {
     console.log('deleting user ', req.query.username);
     var userToDelete = req.query.username;
@@ -304,6 +299,7 @@ router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function 
         //we need to also delete the invoice here
 
         User.findOneAndRemove({username: userToDelete}, function (err, doc, result) {
+
             if (err) {
                 console.log('error thrown ', err.message);
                 res.sendStatus(200);

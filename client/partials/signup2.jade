@@ -3,9 +3,10 @@ article(class="loginPage")
     header
         div(class="logo")
             img(class="logo" src="/images/Nordeast-Makers-Logo1.png" alt="Nordead Makers Logo")
-        div(class="login register")
+        div(class="login register" ng-hide="loading")
             #login PAYMENT
-    form(class="registrationForm")
+    form(class="registrationForm" ng-hide="loading")
+
       md-input-container(class="inputItem")
         label(for="cardname") Name on Card
         input(name="cardname" ng-model="user.cardName" type="text" id="cardname")
@@ -31,7 +32,11 @@ article(class="loginPage")
             p Est in vivendum comprehensam conclusionemque, alia cetero iriure no usu, te cibo deterruisset pro. Ludus epicurei quo id, ex cum iudicabit intellegebat. Ex modo deseruisse quo, mel noster menandri sententiae ea, duo et tritani malorum recteque. Nullam suscipit partiendo nec id, indoctum vulputate per ex. Et has enim habemus tibique. Cu latine electram cum, ridens propriae intellegat eu mea.
       md-content(layout="row" layout-align="center")
         md-checkbox(ng-model="user.waiver" aria-label="Waiver Acknowledgement") I have read and agree to the above waiver
-    div(class="registerLink")
+
+    div(class="registerLink" ng-hide="loading")
       p(class="registerChg inputItem") Upon signing up, you will be charged $200 per month automatically until you cancel your membership.
       md-content(class="inputItem")
         md-button(class="md-raised md-button md-primary loginBtn" ng-click="signUp()") Sign Up
+
+div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="loading")

@@ -4,6 +4,9 @@
 app.controller('loginCtrl', ['$scope', '$http', '$location', '$rootScope', 'authService', function($scope, $http, $location, $rootScope, authService){
 
     $scope.login = function(){
+
+        $scope.loading = true;
+
         $http.post('/login', $scope.user)
             .then(function (response) {
                 sessionStorage.setItem('userToken', response.data);
@@ -14,6 +17,9 @@ app.controller('loginCtrl', ['$scope', '$http', '$location', '$rootScope', 'auth
                     default: $location.path("/user");
                 }
 
+            }).finally(function() {
+
+                $scope.loading = false;
 
             });
     };

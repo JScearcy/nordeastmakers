@@ -12,9 +12,9 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var tools = require('./routes/tools');
 var bookings = require('./routes/bookings');
-var invoices = require('./routes/freshbooks_invoices');
 var business = require('./routes/business');
 var login = require('./routes/login');
+
 var refactor = require('./routes/bookings_refactor');
 var issues = require('./routes/issue_reporting');
 var free_user = require('./routes/free_user');
@@ -27,22 +27,28 @@ app.set('view engine', 'jade');
 
 
 var expressJwt = require('express-jwt');
+
 app.use('/admin/*', expressJwt({secret: process.env.SECRET}), function(req,res,next){
+
   if(req.user.accountType === 'admin'){
     next();
   } else {
     res.status(401).send('Not Authorized')
   }
 });
+
 app.use('/business/*', expressJwt({secret: process.env.SECRET}), function(req,res,next){
+
   if(req.user.accountType === 'business'){
     next();
   } else {
     res.status(401).send('Not Authorized')
   }
 });
+
 app.use('/private/*', expressJwt({secret: process.env.SECRET}));
 app.use('/tools/*', expressJwt({secret: process.env.SECRET}));
+
 
 app.use(function (err, req, res, next) {
   if (err.name === 'UnauthorizedError') {
@@ -78,12 +84,12 @@ app.use('/users', users);
 app.use('/business', business);
 app.use('/tools', tools);
 app.use('/bookings', bookings);
-app.use('/freshbooks_invoices',invoices);
 app.use('/login', login);
 app.use('/bookings_refactor', refactor);
 app.use('/free_user', free_user);
 app.use('/issues', issues);
 app.use('/*', routes);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

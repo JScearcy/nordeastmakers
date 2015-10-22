@@ -9,6 +9,7 @@ var ToolSchema = new Schema({
     dailyHours: { type: Number, required: true},
     weeklyHours: { type: Number, required: true},
     online: { type: Boolean, required: true}
+
 });
 
 module.exports = mongoose.model('Tools', ToolSchema);

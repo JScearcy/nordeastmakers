@@ -19,7 +19,7 @@ var UserSchema = new mongoose.Schema({
     accountType: {type: String},
     accessCode: {type: String},
     billDate: {type: String},
-    active: {type: Boolean, default: true}
+    active: {type: String} //storing the value of the stopped property from freshbooks, not to be interpreted as boolean
 });
 
 UserSchema.pre('save', function (next) {
@@ -71,26 +71,40 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                 // check if the password was a match
                 if (isMatch) {
 
-                        var user = {
-                            username: doc.username,
-                            id: doc.id,
-                            first_name: doc.first_name,
-                            last_name: doc.last_name,
-                            accountType: doc.accountType,
-                            active: doc.active,
-                            billDate: doc.billDate
-                        };
+                    var user = {
+                        username: doc.username,
+                        id: doc.id,
+                        first_name: doc.first_name,
+                        last_name: doc.last_name,
+                        accountType: doc.accountType,
+                        active: doc.active,
+                        billDate: doc.billDate
+                    };
 
-                        // return the jwt
-                        var token = jsonwebtoken.sign(user, process.env.SECRET, {
+                    var id = doc.recurring_id;
+                    console.log('recurring id for stardust', doc.recurring_id);
+                    freshbooks.recurring.get(id, function(err, result){
 
-                            expiresIn: (60 * 60 * 24) // expires in 24 hours
+                            if(result.stopped != doc.active){
+                            console.log('acct status mismatch');
+                            doc.active = result.stopped;
+                            doc.billDate = result.date;
+                            doc.save(function(err, result){
+                                    if(err){console.log(err);}
+                                })
 
-                        });
+                            }
+                    });
 
 
+                    // return the jwt
 
-                        return callback(null, token, user);
+                    var token = jsonwebtoken.sign(user, process.env.SECRET, {
+
+                        expiresIn: (60 * 60 * 24) // expires in 24 hours
+
+                    });
+                    return callback(null, token, user);
 
                 }
                 else {

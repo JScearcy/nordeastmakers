@@ -135,16 +135,18 @@ a {
 .topMargin {
   margin-top: 50px;
 }
-.ng-scope {
-  height: 100%;
-}
 .table {
   width: 100%;
 }
 .minMaxHeight {
   max-height: 570px;
-  min-height: 350px;
+  min-height: 550px;
 }
 .machineButton {
   margin: 5px 0 5px auto;
+}
+.height100 {
+  height: 100%;
+}
+@media (min-width: 1000px){
 }
