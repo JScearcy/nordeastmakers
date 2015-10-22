@@ -1,4 +1,4 @@
-app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
+app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function($scope, $http, $location, $rootScope, $mdDialog){
   function getUsers(){
   return $http({
     method: 'GET',
@@ -9,34 +9,6 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
   }
 
   getUsers();
-
-  $scope.updateUser = function(index) {
-    var data = $scope.users[index];
-    $http({
-      method: 'PUT',
-      url: '/users',
-      data: data
-    }).then(function(res){
-      if(res.status == 200){
-        getUsers();
-      }
-    });
-  };
-
-  $scope.deleteUser = function(index) {
-    var deletethem = {'username': $scope.users[index].username};
-    $http({
-      method: 'DELETE',
-      url: '/users',
-      params: deletethem
-    }).then(function(res){
-      if(res.status == 200){
-        getUsers();
-      }
-    });
-  };
-
-    getUsers();
 
     $scope.updateUser = function (index) {
         $scope.loading = true;
@@ -55,9 +27,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
 
     $scope.deleteUser = function (index) {
         $scope.loading = true;
-        console.log('this is the index on delete ' + index);
         var deletethem = {'username': $scope.users[index].username};
-        console.log(deletethem);
         $http({
             method: 'DELETE',
             url: '/users',
@@ -67,6 +37,19 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
             if (res.status == 200) {
                 getUsers();
             }
+        });
+    };
+
+    $scope.addUser = function (ev) {
+        $mdDialog.show({
+            templateUrl: '/admin/addusers.html',
+            parent: angular.element(document.body),
+            targentEvent: ev,
+            clickOutsideToClose: true,
+            locals: {
+                //user: user
+            }
+        }).then(function (err, data) {
         });
     };
 
@@ -82,17 +65,14 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
             }
         }).then(function (err, data) {
 
-            console.log(data);
+
         });
         //.then is optional here
     };
 
     $scope.updatePassword = function (user) {
         $scope.loading = true;
-        //console.log('this is the index on delete ' + index);
-        console.log("this is the user", user);
         var updatethem = {'password': user.newpassword, 'username': user.username};
-        console.log(updatethem.password, updatethem.id);
         $http({
             method: 'PUT',
             url: '/users',

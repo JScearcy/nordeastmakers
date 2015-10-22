@@ -43,11 +43,9 @@ app.service('authService', ['$window', function ($window) {
     //Saves token to local Storage
     this.saveToken = function (token) {
         $window.localStorage.jwtToken = token;
-        console.log('Saved token:',$window.localStorage.jwtToken);
     };
     // returns a token
     this.getToken = function () {
-        //console.log("the token is "+ $window.localStorage.jwtToken);
         return $window.localStorage.jwtToken;
     };
     // checks to see if there is a token and if it is valid

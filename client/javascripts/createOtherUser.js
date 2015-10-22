@@ -3,7 +3,7 @@ app.controller('createOtherUser', ['$rootScope', '$scope', '$http', '$location',
 
   //take first page and add to rootscope user
   $scope.newUser = function(){
-
+      
       if($scope.user.password === $scope.user.verifypassword) {
 
         $rootScope.user = $scope.user;

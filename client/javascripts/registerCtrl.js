@@ -11,14 +11,12 @@ app.controller('registerCtrl', ['$rootScope', '$scope', '$http', '$location', fu
         $scope.loading = true;
 
         $rootScope.user = $scope.user;
-        console.log('entered', $rootScope.user );
 
         $http.post('/users', $rootScope.user)
             .then(function(res) {
 
                 $scope.loading = false;
 
-                console.log(res);
                 if(res.data.userexists){
                     $location.path("/");
                     $rootScope.user = {};
@@ -77,4 +75,3 @@ app.controller('registerCtrl', ['$rootScope', '$scope', '$http', '$location', fu
 
 
 }]);
-
