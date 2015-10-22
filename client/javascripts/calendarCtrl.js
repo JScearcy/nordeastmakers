@@ -5,6 +5,8 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
   //initialize the variables used through out the controller
   $scope.userId = authService.parseJwt(sessionStorage.getItem('userToken')).id;
   $scope.userType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType;
+  $scope.billDate = authService.parseJwt(sessionStorage.getItem('userToken')).billDate;
+  $scope.active = authService.parseJwt(sessionStorage.getItem('userToken')).active
   var username = authService.parseJwt(sessionStorage.getItem('userToken')).username,
       accountType = authService.parseJwt(sessionStorage.getItem('userToken')).accountType,
       allReservations = [],
@@ -39,7 +41,11 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       $scope.reservation.date.getFullYear(),
       $scope.reservation.date.getMonth() + 1,
       $scope.reservation.date.getDate());
-
+  if($scope.active){
+    if($scope.billDate){
+      $scope.maxDate = new Date($scope.billDate);
+    }
+  }
 //this controls adds or removes the id from a particular hour in the hours array
   $scope.addHourToggle = function(clickedHour){
     //first major if - checks if the item exists in the reservation array already - if so remove = true and the other ifs take that into account

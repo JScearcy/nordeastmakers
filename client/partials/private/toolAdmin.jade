@@ -23,7 +23,7 @@ div(ng-controller="machineResCtrl")
           md-option(value="false") Offline
       md-input-container(class="inputItem")
         label(for="subBtn")
-        input(type="submit" value="Reserve" class="md-button md-raised md-primary" ng-disabled="!machine.online || active == true" name="subBtn" id="subBtn" ng-click="openCalendar($index, $event)")
+        input(type="submit" value="Reserve" class="md-button md-raised md-primary" ng-disabled="!machine.online" name="subBtn" id="subBtn" ng-click="openCalendar($index, $event)")
       md-input-container(class="inputItem" ng-hide="accountType != 'admin'")
         label(for="subBtn")
         input(type="submit" value="Update Machine" class="md-button md-raised md-primary" name="subBtn" id="subBtn" ng-click="updateMachine($index)")
