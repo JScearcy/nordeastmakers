@@ -1,6 +1,5 @@
 app.controller('machineAddCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
   $scope.addMachine = function() {
-    console.log("entered addMachine");
     data = $scope.machine;
     data.online = true;
     $scope.loading = true;

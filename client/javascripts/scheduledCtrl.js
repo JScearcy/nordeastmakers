@@ -26,7 +26,6 @@ app.controller('scheduledCtrl', ['$scope', '$http', '$location', 'hoursService',
       otherReservations = [];
 
   var displayReserved = function(){
-    console.log($scope.machines)
     $scope.machines.forEach(function(machine, index){
       hoursService.getReservations(machine._id, hoursService, function(reserve){
         $scope.machines[index].reservations = hoursService.updateHours(reserve, $scope.date, user);

@@ -55,9 +55,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
 
     $scope.deleteUser = function (index) {
         $scope.loading = true;
-        console.log('this is the index on delete ' + index);
         var deletethem = {'username': $scope.users[index].username};
-        console.log(deletethem);
         $http({
             method: 'DELETE',
             url: '/users',
@@ -82,17 +80,14 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
             }
         }).then(function (err, data) {
 
-            console.log(data);
+
         });
         //.then is optional here
     };
 
     $scope.updatePassword = function (user) {
         $scope.loading = true;
-        //console.log('this is the index on delete ' + index);
-        console.log("this is the user", user);
         var updatethem = {'password': user.newpassword, 'username': user.username};
-        console.log(updatethem.password, updatethem.id);
         $http({
             method: 'PUT',
             url: '/users',
