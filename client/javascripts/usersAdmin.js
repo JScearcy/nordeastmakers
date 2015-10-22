@@ -43,42 +43,24 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
         });
     };
 
-    $scope.updatePasswordForm = function (index, ev) {
+    $scope.updatePasswordForm = function (user, ev) {
+        console.log("this thing", user);
         $mdDialog.show({
-            controller: 'userAdminCtrl',
+            controller: 'updatePasswordCtrl',
             templateUrl: '/private/updatePassword.html',
             parent: angular.element(document.body),
             targentEvent: ev,
             clickOutsideToClose: true,
-            locals: {
-                //user: user
-            }
-        }).then(function (err, data) {
+            locals: {user: user}
 
-            console.log(data);
+        }).then(function (data) {
+
+            console.log("this is the thing", data);
         });
         //.then is optional here
     };
 
-    $scope.updatePassword = function (user) {
-        $scope.loading = true;
-        //console.log('this is the index on delete ' + index);
-        console.log("this is the user", user);
-        var updatethem = {'password': user.newpassword, 'username': user.username};
-        console.log(updatethem.password, updatethem.id);
-        $http({
-            method: 'PUT',
-            url: '/users',
-            params: updatethem
-        }).then(function (res) {
-            $scope.loading = false;
-            if (res.status == 200) {
-                getUsers();
-            }
-        }).finally(function () {
-            $scope.loading = false;
-        });
-    };
+
 }]);
 
 
