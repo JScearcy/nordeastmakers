@@ -1,9 +1,11 @@
 app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function ($scope, $http, $location, $rootScope, $mdDialog) {
     function getUsers() {
+        $scope.loading = true;
         return $http({
             method: 'GET',
             url: '/users'
         }).then(function (res) {
+            $scope.loading = false;
             $scope.users = res.data;
             console.log($scope.users);
         });

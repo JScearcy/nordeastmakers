@@ -1,4 +1,6 @@
 md-content(ng-controller="machineResCtrl" class="contentPane" layout="row" layout-align="center")
+  div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="loading")
   div(layout="column" class="loginPage")  
     header
       div(class="login")
@@ -17,5 +19,4 @@ md-content(ng-controller="machineResCtrl" class="contentPane" layout="row" layou
         label(for="subBtn")
         input(type="submit" value="Add Machine" class="loginBtn md-button md-raised md-primary" ng-disabled="addMachineForm.$invalid" name="subBtn" id="subBtn" ng-click="addMachine()")
 
-div(layout="row" layout-sm="column" layout-align="space-around")
-  md-progress-circular(md-mode="indeterminate" ng-show="loading")
+

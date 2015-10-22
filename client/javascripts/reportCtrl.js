@@ -14,12 +14,17 @@ app.controller('reportCtrl', ['$scope', '$http', '$location', 'toolService', 'au
     updateTools();
     //report issue and update tools
     $scope.sendReport = function(){
+        $scope.loading = true;
       $scope.report.username = user.username;
       $http({
         method: 'POST',
         url: '/issues',
         data: $scope.report
       }).then(function(res){
+        $scope.loading = false;
+        $scope.messaged = true;
+        $scope.report.issueReport = "";
+        $scope.reportForm.$setPristine();
         updateTools();
       })
     }

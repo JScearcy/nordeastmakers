@@ -171,3 +171,6 @@ td {
 table thead th { border-bottom: 3px solid #000; }
 
 
+.center {
+  text-align: center;
+}

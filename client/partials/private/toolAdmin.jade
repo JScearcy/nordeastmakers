@@ -30,3 +30,6 @@ div(ng-controller="machineResCtrl")
       md-input-container(flex="1" class="delItem" ng-hide="accountType != 'admin'")
         label(for="delBtn")
         input(type="button" value="X" class="md-button md-raised md-warn" name="delBtn" id="delBtn" ng-click="deleteMachine($index)")
+
+  div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="machine")
