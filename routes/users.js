@@ -137,6 +137,7 @@ router.post('/', function (req, res) {
                             freshbooks.client.create(newFbUser, function (error, client) {
                                 if (error) {
                                     console.log('freshbooks error thrown', error.message);
+                                    res.sendStatus(400);
                                 } else {
                                     //if there is no error thrown, post info to mongo too
                                     console.log(data);
@@ -273,6 +274,15 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                     freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: req.body.active /*, date: date */ }, function(err, response){
                         console.log('recurring invoice updated', response.stopped);
                     } )
+
+                    //Update billDate in mongoDb to reflect latest billing cycle
+                    freshbooks.invoice.list(function(err, result){
+                        result.forEach(function(elem, index){
+                            if(elem.recurring_id == req.body.recurring_id){
+                                user.billDate = elem.date;
+                            }
+                        })
+                    })
                 }
 
             }
