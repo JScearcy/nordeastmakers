@@ -19,12 +19,12 @@ app.service('hoursService',['$http', function($http){
       cb(res.data);
     });
   }
-  this.getReservations = function(id, hoursService, cb) {
+  this.getReservations = function(index, id, hoursService, cb) {
     return $http({
       method: 'GET',
       url: '/bookings/' + id
     }).then(function(res){
-      cb(res.data);
+      cb(index, res.data);
     })
   }
   this.momentDates = function(date) {
@@ -37,17 +37,20 @@ app.service('hoursService',['$http', function($http){
   this.updateHours = function(reservations, date, user) {
     var hours = new serviceThis.dayHours();
     if(reservations.length > 0) {
-      reservations.forEach(function(reservation, index){
-        if(reservation.date === serviceThis.momentDates(date)) {
-          reservation.reservations.forEach(function(reservation, index){
-            hours.forEach(function(oldHour, index){
-              if(reservation.hr == oldHour.hr && user.username == reservation.username){
-                hours[index] = reservation;
+      var l1 = reservations.length;
+      while(l1--){
+        if(reservations[l1].date === serviceThis.momentDates(date)){
+          var l2 = reservations[l1].reservations.length;
+          while(l2--){
+            var l3 = hours.length;
+            while(l3--){
+              if(reservations[l1].reservations[l2].hr == hours[l3].hr && user.username == reservations[l1].reservations[l2].username){
+                hours[l3] = reservations[l1].reservations[l2];
               }
-            });
-          });
+            }
+          }
         }
-      });
+      }
     } else {
       hours = new serviceThis.dayHours();
     }

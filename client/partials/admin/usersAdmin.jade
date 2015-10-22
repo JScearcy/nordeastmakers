@@ -1,38 +1,39 @@
 div(ng-controller="userAdminCtrl")
+  md-content(ng-hide="accountType != 'admin'" class="bgrndMast ")
+    md-button(class="machineButton md-primary md-raised" ng-click="addUser($event)") Add User
   div(layout="row" layout-sm="column" layout-align="space-around")
     md-progress-circular(md-mode="indeterminate" ng-show="loading")
-  div(ng-repeat="user in users")
+  div(ng-repeat="user in users" class="usersWidth")
     header
       div(class="login")
         #userAdmin User
-    form(name="userStatForm" id="userStatForm" class="loginForm" layout="row" layout-md="column" layout-sm="column")
-      md-input-container(class="inputItem" flex)
+    form(name="userStatForm" id="userStatForm" class="loginForm" flex layout="column" layout-gt-lg="row")
+      md-input-container(class="inputItem" flex="10")
         label(for="username") Username
         input(type="text" id="username" name="username" ng-model="user.username" value="{{user.username}}" readonly)
-      md-input-container(class="inputItem" flex)
+      md-input-container(class="inputItem" flex="10")
         label(for="first_name") First Name
         input(type="text" id="first_name" name="first_name" ng-model="user.first_name" value="{{user.first_name}}" readonly)
-      md-input-container(class="inputItem" flex)
+      md-input-container(class="inputItem" flex="10")
         label(for="last_name") Last Name
         input(type="text" id="last_name" name="last_name" ng-model="user.last_name" value="{{user.last_name}}" readonly)
-      md-input-container(class="inputItem" flex)
+      md-input-container(class="inputItem" flex="15")
         label(for="email") Email
         input(type="text" id="email" name="email" ng-model="user.email" value="{{user.email}}" readonly)
-      md-input-container(class="inputItem" flex)
+      md-input-container(class="inputItem" flex="8")
         label(for='status') Status
         md-select(name='status' id='status' ng-model='user.active' aria-label="Select user status")
           md-option(value="0") Active
           md-option(value="1") Disabled
-      md-input-container(class="inputItem" flex)
+      md-input-container(class="inputItem" flex="6")
         label(for="accountType") Account Type
-        input(type="text" id="accountType" name="accountType" ng-model="user.accountType" value="{{user.accountType}}" readonly)
-      md-input-container(class="inputItem" flex)
+        input(type="text" id="accountType" name="ac6ountType" ng-model="user.accountType" flex value="{{user.accountType}}" readonly)
+      md-input-container(class="inputItem" flex="8")
         label(for="subBtn")
-        input(type="submit" value="Update" class="loginBtn md-button md-raised md-primary" name="subBtn" id="subBtn" ng-click="updateUser($index)")
-      md-input-container(class="inputItem" flex)
+        input(type="submit" value="Update" class="loginBtn md-button md-raised md-primary" flex name="subBtn" id="subBtn" ng-click="updateUser($index)")
+      md-input-container(class="inputItem" flex="8")
         label(for="updatePass")
-        input(type="button" value="updatePassword" class="updatePass md-button md-raised md-accent" name="updatePass" id="updatePass" ng-click="updatePasswordForm(user)")
-      md-input-container(class="inputItem" flex)
+        input(type="button" value="Reset PW" class="loginBtn md-button md-raised md-accent" flex name="updatePass" id="updatePass" ng-click="updatePasswordForm(user)")
+      md-input-container(class="inputItem" flex="8")
         label(for="delBtn")
         input(type="button" value="X" class="delBtn md-button md-raised md-warn" name="delBtn" id="delBtn" ng-click="deleteUser($index)")
-
