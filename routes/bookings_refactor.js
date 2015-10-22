@@ -1,6 +1,28 @@
 var express = require('express');
 var router = express.Router();
 var Booking = require('../models/booking');
+var Freshbooks = require('freshbooksjs');
+var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
+
+router.get('/inv', function(req, res){
+    freshbooks.invoice.list(function(err, result){
+        var inv = [];
+        result.forEach(function(elem, index){
+            console.log(elem.recurring_id, elem.status, elem.date);
+            if(elem.recurring_id == '34176'){
+                inv.push(elem);
+            }
+        })
+/*
+        result.forEach(function(elem, index){
+            if(parseInt(elem.number) == Math.max.apply(null,arr)){
+                inv.push(elem);
+            }
+        })
+*/
+        res.send(inv);
+    })
+})
 
 
 router.get('/:toolId?/:date?', function(req, res){
