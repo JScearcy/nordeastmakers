@@ -41,9 +41,10 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       $scope.reservation.date.getFullYear(),
       $scope.reservation.date.getMonth() + 1,
       $scope.reservation.date.getDate());
+  //if the account is deactivated this will calculate the last day they should be allowed to book
   if($scope.active){
     if($scope.billDate){
-      $scope.maxDate = new Date($scope.billDate);
+      $scope.maxDate = new Date(moment().add(1, 'month').format('YYYY-MM')+ '-' + moment($scope.billDate).format('DD'));
     }
   }
 //this controls adds or removes the id from a particular hour in the hours array
