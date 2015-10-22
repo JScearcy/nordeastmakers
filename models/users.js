@@ -82,11 +82,13 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                     };
 
                     if(user.accountType == !"admin" || !"helper" ){
+
                         var id = doc.recurring_id;
                         console.log('recurring id for stardust', doc.recurring_id);
                         freshbooks.recurring.get(id, function(err, result){
 
-                                if(result.stopped != doc.active){
+
+                            if(result.stopped != doc.active){
                                 console.log('acct status mismatch');
                                 doc.active = result.stopped;
                                 doc.billDate = result.date;
@@ -97,6 +99,7 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                                 }
                         });
                     }
+
 
                     // return the jwt
 
