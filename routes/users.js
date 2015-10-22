@@ -224,8 +224,10 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     console.log('changing some propterty on this user ', req.params);
 
 
+
     if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
       User.findOne({username: req.query.username}, function (err, result) {
+// >>>>>>> a07d15f60b7e8b1f393b392a300f8d39bcecf207
 
         if (result) {
             var user = result;
@@ -268,6 +270,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             if (req.query.accessCode) {
                 user.accessCode = req.query.accessCode;
             }
+
 
             if (req.query.active) {
                 user.active = req.query.active;

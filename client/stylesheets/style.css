@@ -146,6 +146,15 @@ a {
   margin: 5px 0 5px auto;
 }
 
+.height100 {
+  height: 100%;
+}
+@media (min-width: 960px) and (max-width: 1199px){
+  .usersWidth {
+    width: 500px;
+  }
+}
+
 
 th {
   padding: 10px;
@@ -161,11 +170,4 @@ td {
 
 table thead th { border-bottom: 3px solid #000; }
 
-.height100 {
-  height: 100%;
-}
-@media (min-width: 960px) and (max-width: 1199px){
-  .usersWidth {
-    width: 500px;
-  }
-}
+

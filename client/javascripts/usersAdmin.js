@@ -43,8 +43,22 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
         });
     };
 
+
+    $scope.addUser = function (ev) {
+        $mdDialog.show({
+            templateUrl: '/admin/addusers.html',
+            parent: angular.element(document.body),
+            targentEvent: ev,
+            clickOutsideToClose: true,
+            locals: {
+                //user: user
+            }
+        }).then(function (err, data) {
+        });
+    };
+
     $scope.updatePasswordForm = function (user, ev) {
-        console.log("this thing", user);
+
         $mdDialog.show({
             controller: 'updatePasswordCtrl',
             templateUrl: '/private/updatePassword.html',
@@ -55,10 +69,8 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
 
         }).then(function (data) {
 
-            console.log("this is the thing", data);
         });
         //.then is optional here
     };
-
 
 }]);
