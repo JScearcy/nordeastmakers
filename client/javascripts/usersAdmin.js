@@ -1,14 +1,15 @@
-app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function($scope, $http, $location, $rootScope, $mdDialog){
-  function getUsers(){
-  return $http({
-    method: 'GET',
-    url: '/users'
-    }).then(function(res){
-      $scope.users = res.data;
-    });
-  }
+app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function ($scope, $http, $location, $rootScope, $mdDialog) {
+    function getUsers() {
+        return $http({
+            method: 'GET',
+            url: '/users'
+        }).then(function (res) {
+            $scope.users = res.data;
+            console.log($scope.users);
+        });
+    }
 
-  getUsers();
+    getUsers();
 
     $scope.updateUser = function (index) {
         $scope.loading = true;
@@ -27,7 +28,9 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
 
     $scope.deleteUser = function (index) {
         $scope.loading = true;
+        console.log('this is the index on delete ' + index);
         var deletethem = {'username': $scope.users[index].username};
+        console.log(deletethem);
         $http({
             method: 'DELETE',
             url: '/users',
@@ -40,21 +43,8 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
         });
     };
 
-    $scope.addUser = function (ev) {
-        $mdDialog.show({
-            templateUrl: '/admin/addusers.html',
-            parent: angular.element(document.body),
-            targentEvent: ev,
-            clickOutsideToClose: true,
-            locals: {
-                //user: user
-            }
-        }).then(function (err, data) {
-        });
-    };
-
-    $scope.updatePasswordForm = function (index, ev) {
-
+    $scope.updatePasswordForm = function (user, ev) {
+        console.log("this thing", user);
         $mdDialog.show({
             controller: 'updatePasswordCtrl',
             templateUrl: '/private/updatePassword.html',
@@ -65,13 +55,10 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
 
         }).then(function (data) {
 
-
             console.log("this is the thing", data);
-
-
-
         });
         //.then is optional here
     };
+
 
 }]);
