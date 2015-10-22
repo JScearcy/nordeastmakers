@@ -221,7 +221,7 @@ router.post('/addon', function(req, res){
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
 
-    console.log('changing some propterty on this user ', req.query);
+    console.log('changing some propterty on this user ', req.user);
 
     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
       User.findOne({username: req.body.username}, function (err, result) {
@@ -314,6 +314,22 @@ router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function 
                 res.sendStatus(200);
             }
             else {
+
+                if(doc.accountType != 'admin' && doc.accountType != 'helper') {
+                    console.log('removing recurring invoice');
+                    freshbooks.recurring.delete(doc.recurring_id, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                    console.log('removing client');
+                    freshbooks.client.delete(doc.client_id, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    })
+                }
+
                 console.log('user ' + doc + ' deleted');
                 res.sendStatus(200);
             }
