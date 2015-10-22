@@ -220,13 +220,21 @@ router.post('/addon', function(req, res){
 
 //update/change acct
 router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
+    //console.log(req.query);
+    console.log('changing some propterty on this user ', req.params);
 
-    console.log('changing some propterty on this user ', req.user);
-
-    if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
-      User.findOne({username: req.body.username}, function (err, result) {
+// <<<<<<< HEAD
+//     console.log('changing some propterty on this user ', req.user);
+//
+//     if(req.user.accountType === 'admin' || req.user.username === req.body.username) {
+//       User.findOne({username: req.body.username}, function (err, result) {
+// =======
+    if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
+      User.findOne({username: req.query.username}, function (err, result) {
+// >>>>>>> a07d15f60b7e8b1f393b392a300f8d39bcecf207
         if (result) {
             var user = result;
+            console.log("the user found in database", user);
 
             //<<<<AUTOBILL INFO DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION COPY>>>>>>>>
             //if (req.body.cardNumber) {
@@ -247,38 +255,50 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             //        res.sendStatus(200);
             //    })
             //}
-
-            if (req.body.email) {
-                user.email = req.body.email;
+            if (req.query.password) {
+                user.password = req.query.password;
             }
-            if (req.body.businessAcct) {
-                user.businessAcct = req.body.businessAcct;
+            if (req.query.email) {
+                user.email = req.query.email;
             }
-            if (req.body.businessAcctUsers) {
-                user.businessAcctUsers = req.body.businessAcctUsers;
+            if (req.query.businessAcct) {
+                user.businessAcct = req.query.businessAcct;
             }
-            if (req.body.accountType) {
-                user.accountType = req.body.accountType;
+            if (req.query.businessAcctUsers) {
+                user.businessAcctUsers = req.query.businessAcctUsers;
             }
-            if (req.body.accessCode) {
-                user.accessCode = req.body.accessCode;
+            if (req.query.accountType) {
+                user.accountType = req.query.accountType;
             }
-            if (req.body.active) {
-                user.active = req.body.active;
-                if(req.body.accountType != 'admin' && req.body.accountType != 'helper'){
-
-                    //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
-                    //stop/start recurring invoice based user active status
-
-                    freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: req.body.active /*, date: date */ }, function(err, response){
-                        console.log('recurring invoice updated', response.stopped);
-                    } )
+            if (req.query.accessCode) {
+                user.accessCode = req.query.accessCode;
+            }
+            if (req.query.active) {
+                user.active = req.query.active;
+                var temp;
+                var date = {};
+                if(req.query.active == 'true'){
+                    temp = 0;
+                }else {
+                    temp = 1;
                 }
 
+                if(req.query.date){
+                    date = req.query.date;
+                }
+                //console.log('right here: ', req.body.active, result.recurring_id);
+
+            //<<<<<<AUTOBILL INFO BELOW DO NOT DELETE!!!! UNCOMMENT ON PRODUCTION VERSION>>>>>
+            //stop/start recurring invoice based user active status
+
+                //freshbooks.recurring.update({recurring_id: result.recurring_id, stopped: temp /*, date: date */ }, function(err, response){
+                //    console.log('recurring invoice updated', response.stopped);
+                //} )
+
             }
-            if (req.body.recurring_id) {
-                user.recurring_id = req.body.recurring_id;
-            }
+            //if (req.body.recurring_id) {
+            //    user.recurring_id = req.body.recurring_id;
+            //}
 
             user.save(function (err) {
                 if (err) {
