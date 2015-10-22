@@ -1,24 +1,25 @@
 
-article(class="loginPage minMaxHeight")
+article(class="loginPage" ng-class="{minMaxHeight: !loading}")
   header
     div(class="logo")
       img(class="logo" src="/images/Nordeast-Makers-Logo1.png" alt="Nordeast Makers Logo")
 
     div(class="login" ng-hide="loading")
       #login LOG IN
-  form(class="loginForm" ng-hide="loading" name="form")
-    md-input-container(class="inputItem")
-      label(for="username") Username
-      input(name="username" ng-model="user.username" type="text" id="username" pattern="^[a-zA-Z0-9!@](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$")
-    md-input-container(class="inputItem")
-      label(for="password") Password
-      input(name="password" ng-model="user.password" type="password" id="password" required)
-    md-content(class="inputItem")
-      input(type="submit" value="Log In" ng-click="login()" id="loginBtn" ng-disabled="form.$invalid" class="loginBtn md-button md-raised md-primary")
-  div(class="registerLink" ng-hide="loading")
-    h2(class="registerQ inputItem") New to Nordeast Makers?
-    md-content(class="inputItem")
-      md-button(class="md-raised md-button loginBtn" id="registerBtn" href="/register") Create an Account
+  div(ng-hide="loading")
+    form(class="loginForm" name="form")
+      md-input-container(class="inputItem")
+        label(for="username") Username
+        input(name="username" ng-model="user.username" type="text" id="username" pattern="^[a-zA-Z0-9!@](_(?!(\.|_))|\.(?!(_|\.))|[a-zA-Z0-9]){4,18}[a-zA-Z0-9]$")
+      md-input-container(class="inputItem")
+        label(for="password") Password
+        input(name="password" ng-model="user.password" type="password" id="password" required)
+      md-content(class="inputItem")
+        input(type="submit" value="Log In" ng-click="login()" id="loginBtn" ng-disabled="form.$invalid" class="loginBtn md-button md-raised md-primary")
+    div(class="registerLink" ng-hide="loading")
+      h2(class="registerQ inputItem") New to Nordeast Makers?
+      md-content(class="inputItem")
+        md-button(class="md-raised md-button loginBtn" id="registerBtn" href="/register") Create an Account
 
 div(layout="row" layout-sm="column" layout-align="space-around")
   md-progress-circular(md-mode="indeterminate" ng-show="loading")
