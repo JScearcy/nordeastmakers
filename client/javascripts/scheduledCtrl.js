@@ -26,12 +26,14 @@ app.controller('scheduledCtrl', ['$scope', '$http', '$location', 'hoursService',
       otherReservations = [];
 
   var displayReserved = function(){
-    console.log($scope.machines)
-    $scope.machines.forEach(function(machine, index){
-      hoursService.getReservations(machine._id, hoursService, function(reserve){
-        $scope.machines[index].reservations = hoursService.updateHours(reserve, $scope.date, user);
+    var ln1 = $scope.machines.length;
+    while(ln1--){
+      hoursService.getReservations(ln1, $scope.machines[ln1]._id, hoursService, function(ln1, reserve){
+        if($scope.machines[ln1]){
+         $scope.machines[ln1].reservations = hoursService.updateHours(reserve, $scope.date, user);
+        }
       })
-    });
+    }
   }
 
 }]);

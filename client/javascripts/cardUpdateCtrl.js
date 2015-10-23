@@ -18,7 +18,6 @@ app.controller('cardUpdateCtrl', ['$scope', '$http', 'authService','user', funct
       data: cardInfo
     }).then(function(res){
       $scope.loading = false;
-      console.log(res);
     }).finally(function() {
       $scope.loading = false;
     })

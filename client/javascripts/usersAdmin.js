@@ -1,40 +1,15 @@
-app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', function($scope, $http, $location, $rootScope){
-  function getUsers(){
-  return $http({
-    method: 'GET',
-    url: '/users'
-    }).then(function(res){
-      $scope.users = res.data;
-    });
-  }
-
-  getUsers();
-
-  $scope.updateUser = function(index) {
-    var data = $scope.users[index];
-    $http({
-      method: 'PUT',
-      url: '/users',
-      data: data
-    }).then(function(res){
-      if(res.status == 200){
-        getUsers();
-      }
-    });
-  };
-
-  $scope.deleteUser = function(index) {
-    var deletethem = {'username': $scope.users[index].username};
-    $http({
-      method: 'DELETE',
-      url: '/users',
-      params: deletethem
-    }).then(function(res){
-      if(res.status == 200){
-        getUsers();
-      }
-    });
-  };
+app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function ($scope, $http, $location, $rootScope, $mdDialog) {
+    function getUsers() {
+        $scope.loading = true;
+        return $http({
+            method: 'GET',
+            url: '/users'
+        }).then(function (res) {
+            $scope.loading = false;
+            $scope.users = res.data;
+            console.log($scope.users);
+        });
+    }
 
     getUsers();
 
@@ -70,10 +45,10 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
         });
     };
 
-    $scope.updatePasswordForm = function (index, ev) {
+
+    $scope.addUser = function (ev) {
         $mdDialog.show({
-            controller: 'userAdminCtrl',
-            templateUrl: '/private/updatePassword.html',
+            templateUrl: '/admin/addusers.html',
             parent: angular.element(document.body),
             targentEvent: ev,
             clickOutsideToClose: true,
@@ -81,29 +56,23 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', f
                 //user: user
             }
         }).then(function (err, data) {
+        });
+    };
 
-            console.log(data);
+    $scope.updatePasswordForm = function (user, ev) {
+
+        $mdDialog.show({
+            controller: 'updatePasswordCtrl',
+            templateUrl: '/private/updatePassword.html',
+            parent: angular.element(document.body),
+            targentEvent: ev,
+            clickOutsideToClose: true,
+            locals: {user: user}
+
+        }).then(function (data) {
+
         });
         //.then is optional here
     };
 
-    $scope.updatePassword = function (user) {
-        $scope.loading = true;
-        //console.log('this is the index on delete ' + index);
-        console.log("this is the user", user);
-        var updatethem = {'password': user.newpassword, 'username': user.username};
-        console.log(updatethem.password, updatethem.id);
-        $http({
-            method: 'PUT',
-            url: '/users',
-            params: updatethem
-        }).then(function (res) {
-            $scope.loading = false;
-            if (res.status == 200) {
-                getUsers();
-            }
-        }).finally(function () {
-            $scope.loading = false;
-        });
-    };
 }]);
