@@ -207,6 +207,7 @@ router.post('/invoice', function(req, res){
                             user.recurring_id = response.recurring_id;
                             user.billDate = response.date;
                             user.client_id = response.client_id;
+                            user.active = response.stopped;
                             user.save(function (err) {
                                 if (err) {
                                     console.log(err)
@@ -220,6 +221,7 @@ router.post('/invoice', function(req, res){
                          else {
                          user.billDate = response.date;
                          user.recurring_id = response.recurring_id;
+                         user.active = response.stopped;
                          user.save(function (err) {
                              if (err) {
                                 console.log(err)
@@ -242,6 +244,7 @@ router.post('/invoice', function(req, res){
                         user.recurring_id = inv.recurring_id;
                         user.billDate = inv.date;
                         user.client_id = inv.client_id;
+                        user.active = inv.stopped;
                         user.save(function (err) {
                             if (err) {
                                 console.log(err)
@@ -255,6 +258,7 @@ router.post('/invoice', function(req, res){
                     else{
                         user.billDate = inv.date;
                         user.recurring_id = inv.recurring_id;
+                        user.active = inv.stopped;
                         user.save(function (err) {
                             if (err) {
                                 console.log(err)
