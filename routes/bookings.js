@@ -103,4 +103,3 @@ function spliceArray(a, b){
 
 
 module.exports = router;
-

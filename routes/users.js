@@ -3,6 +3,8 @@ var router = express.Router();
 var path = require('path');
 var Freshbooks = require('freshbooksjs');
 var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
+//var freshbooks = new Freshbooks("https://teamnordeast.freshbooks.com/api/2.1/xml-in", "a5f4b3b560d79f98dfe4a98a058521bc");
+
 var User = require('../models/users');
 var expressJwt = require('express-jwt');
 
@@ -290,17 +292,12 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
     //console.log(req.query);
     console.log('changing some propterty on this user ', req.params);
 
-<<<<<<< HEAD
-    if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
-      User.findOne({username: req.query.username}, function (err, result) {
-=======
 
 
     if(req.user.accountType === 'admin' || req.user.username === req.query.username) {
       User.findOne({username: req.query.username}, function (err, result) {
 // >>>>>>> a07d15f60b7e8b1f393b392a300f8d39bcecf207
 
->>>>>>> d927beb2cbd1163f533197af9fb912419d6cd13d
         if (result) {
             var user = result;
             console.log("the user found in database", user);
