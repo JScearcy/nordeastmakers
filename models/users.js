@@ -81,7 +81,7 @@ UserSchema.statics.getAuthenticated = function (user, callback) {
                         billDate: doc.billDate
                     };
 
-                    if(user.accountType == !"admin" || !"helper" ){
+                    if(user.accountType != 'admin' && user.accountType != 'helper'){
 
                         var id = doc.recurring_id;
                         console.log('recurring id for stardust', doc.recurring_id);
