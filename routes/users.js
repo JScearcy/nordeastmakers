@@ -137,6 +137,7 @@ router.post('/', function (req, res) {
                             freshbooks.client.create(newFbUser, function (error, client) {
                                 if (error) {
                                     console.log('freshbooks error thrown', error.message);
+                                    res.sendStatus(400);
                                 } else {
                                     //if there is no error thrown, post info to mongo too
                                     console.log(data);
@@ -272,6 +273,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
             }
 
 
+
             if (req.query.active) {
                 user.active = req.query.active;
                 var temp;
@@ -280,6 +282,7 @@ router.put('/', expressJwt({secret: process.env.SECRET}), function (req, res) {
                     temp = 0;
                 }else {
                     temp = 1;
+
                 }
 
                 if(req.query.date){
