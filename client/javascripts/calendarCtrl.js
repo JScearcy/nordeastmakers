@@ -15,7 +15,6 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
       otherReservations = [],
       removedReservations = [];
 
-  $scope.myDate = new Date();
   $scope.hours = new hoursService.dayHours;
   //function to close calendar box
   $scope.hide = function() {
@@ -31,21 +30,39 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
     date: new Date(),
     reservations: []
   };
-  getReservations();
-//create the min and max dates for the datepicker
+  $scope.myDate = new Date();
   $scope.minDate = new Date(
       $scope.reservation.date.getFullYear(),
       $scope.reservation.date.getMonth(),
       $scope.reservation.date.getDate());
-  $scope.maxDate = new Date(
-      $scope.reservation.date.getFullYear(),
-      $scope.reservation.date.getMonth() + 1,
-      $scope.reservation.date.getDate());
+//create the min and max dates for the datepicker
+  if($scope.active == '0'){
+    $scope.maxDate = new Date(
+        $scope.reservation.date.getFullYear(),
+        $scope.reservation.date.getMonth() + 1,
+        $scope.reservation.date.getDate());
+
+  } else {
   //if the account is deactivated this will calculate the last day they should be allowed to book
-  if($scope.active){
     if($scope.billDate){
-      $scope.maxDate = new Date(moment().add(1, 'month').format('YYYY-MM')+ '-' + moment($scope.billDate).format('DD'));
+      if(moment(new Date($scope.billDate)).format('YYYY') == moment(new Date()).format('YYYY')) {
+        $scope.maxDate = new Date(moment($scope.billDate).add(1, 'month'));
+        if($scope.maxDate < $scope.minDate){
+          setDatesBack();
+        }
+      } else {
+        setDatesBack();
+      }
+    } else {
+      setDatesBack();
     }
+  }
+  getReservations();
+  function setDatesBack() {
+    $scope.reservation.date = new Date('1970-1-1');
+    $scope.myDate = new Date('1970-1-1');
+    $scope.minDate = new Date('1970-1-1');
+    $scope.maxDate = new Date('1970-1-1');
   }
 //this controls adds or removes the id from a particular hour in the hours array
   $scope.addHourToggle = function(clickedHour){
@@ -165,7 +182,7 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
                 headers: {"Content-Type": "application/json;charset=utf-8"}
               }).then(function(res){
                 $scope.loading = false;
-                getReservations()
+                getReservations();
               });
             } else {
                 $scope.loading = false;
@@ -181,8 +198,8 @@ app.controller('calendarCtrl', ['$scope', '$http', '$mdDialog', 'machine', 'auth
             data: reservation,
             headers: {"Content-Type": "application/json;charset=utf-8"}
           }).then(function(res){
-            $scope.loading =false;
-            getReservations()
+            $scope.loading = false;
+            getReservations();
           })
       }
   }

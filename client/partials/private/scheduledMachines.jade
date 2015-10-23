@@ -1,7 +1,8 @@
 div(ng-controller="scheduledCtrl" class="grayBack" ng-cloak) 
-    h1 Your Scheduled Times for {{displaydate}}
-    h2 Visit the Machines page to schedule time
-
+    h1(ng-show="active == '0'") Your Scheduled Times for {{displaydate}}
+    h1(ng-hide="active == '0'") Your account is currently disabled. You can still book time through {{billDate}}.
+    h2(ng-show="active == '0'") Visit the Machines page to schedule time
+    
     md-datepicker(ng-model="date" ng-change="updateScheduled()" ng-value="myDate" md-placeholder="Enter date"
       md-min-date="minDate" md-max-date="maxDate" aria-label="Reservations Date Picker")
     div(ng-repeat="machine in machines")
