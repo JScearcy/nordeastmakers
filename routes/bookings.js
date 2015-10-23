@@ -3,9 +3,11 @@ var router = express.Router();
 var Booking = require('../models/booking');
 
 router.get('/:toolId?', function(req, res){
-    console.log('getting booked timeslots', req.params);
     var today = new Date();
     today.setDate(today.getDate()-1);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
 
     //retrieve all date objects for given toolId and exclude objects that are in the past
     Booking.find({toolId: req.params.toolId},function(err, result){
