@@ -94,20 +94,10 @@ router.post('/', function (req, res) {
                     var email = data.email;
 
 
-                    //The postMongo variable stores the function to post info to the MongoDB- this will be called later
-                    var postMongo = function (user) {
-                        var user = new User(user);
-                        user.save(function (err) {
-                            if (err) {
-                                console.log('mongo error thrown ', err);
-                            }
-                        })
-                    };
 
                     //to check to see if they are in freshbooks first we get all the users that exist
                     freshbooks.client.list(function (err, clients) {
                         if(err){ console.log('freshbooks error thrown', err)}
-                        console.log(clients);
                         //loop through the users to see if the user signing up exists in Freshbooks by comparing the email addresses
                         clients.forEach(function (elem) {
                             if (elem.email == email) {
@@ -144,8 +134,10 @@ router.post('/', function (req, res) {
                                     //we need to store the client_id in mongo in order to find the user later
                                     data.client_id = client.client_id;
                                     //post to mongo by calling the postMongo function and passing it the data
+/*
                                     postMongo(data);
                                     console.log("it was posted to Freshbooks!");
+*/
                                     //send client-side the variable that will tell them that they need to send the user to the next page in the from
                                     res.send({"userExists": userExists, 'client_id': client.client_id});
                                 }
@@ -166,44 +158,120 @@ router.post('/', function (req, res) {
 
 //creating recurring invoice for current user/client_id
 router.post('/invoice', function(req, res){
-    console.log('Creating new recurring invoice for user ', req.body);
+    console.log('Creating new recurring invoice for user ', req.body.client_id);
+    var inv;
+    var invExists = false;
 
-    var auto = {};
+    freshbooks.recurring.list(function(err, response){
+        if(err){console.log(err)}
+        else{
+            response.forEach(function(elem, index){
+                console.log(elem.client_id);
+                if(elem.client_id == req.body.client_id){
+                    console.log('match: ', elem);
+                    inv = elem;
+                    invExists = true;
+                }
+            })
 
-    //autobill information for live acct. Does not work on teamnordeast acct due lack of Stripe connection
-/*
-    auto.gateway_name = 'Stripe';
-    auto.card = {};
-    auto.card.number = req.body.cardNumber;
-    auto.card.name = req.body.cardName;
-    auto.card.expiration = {};
-    auto.card.expiration.month = req.body.expirationMonth;
-    auto.card.expiration.year = req.body.expirationYear;
-*/
+            var auto = {};
 
-    var membership = {line: {name: 'Membership', unit_cost: '200', quantity: '1'}};
-    var invoice = {client_id: req.body.client_id, frequency: 'monthly', /*autobill: auto,*/ lines: membership};
-    freshbooks.recurring.create(invoice, function(err, response){
-        if(err) {
-          console.log(err);
-        }
-        console.log('Recurring invoice created', response);
-        User.findOne({client_id: response.client_id }, function(err, user){
-            if(err){console.log(err)}
-            else{
-                user.recurring_id = response.recurring_id;
-                user.billDate = response.date;
-                user.save(function(err){
-                    if(err){console.log(err)}
-                    else{
-                        console.log('recurring id added');
-                        //res.sendStatus(200);
+            //autobill information for live acct. Does not work on teamnordeast acct due lack of Stripe connection
+            /*
+             auto.gateway_name = 'Stripe';
+             auto.card = {};
+             auto.card.number = req.body.cardNumber;
+             auto.card.name = req.body.cardName;
+             auto.card.expiration = {};
+             auto.card.expiration.month = req.body.expirationMonth;
+             auto.card.expiration.year = req.body.expirationYear;
+             */
+            console.log('recurring invoice exists: ',invExists);
+            if(!invExists) {
+                var membership = {line: {name: 'Membership', unit_cost: '200', quantity: '1'}};
+                var invoice = {client_id: req.body.client_id, frequency: 'monthly', /*autobill: auto,*/ lines: membership};
+                freshbooks.recurring.create(invoice, function (err, response) {
+                    if (err) {
+                        console.log(err);
                     }
+                    console.log('Recurring invoice created', response);
+                    //User.findOne({client_id: response.client_id }, function(err, user){
+                    User.findOne({username: req.body.username}, function (err, user) {
+
+                        if (err) {
+                            console.log(err)
+                        }
+
+                        else if (!user) {
+                            var user = new User(req.body);
+                            user.recurring_id = response.recurring_id;
+                            user.billDate = response.date;
+                            user.client_id = response.client_id;
+                            user.save(function (err) {
+                                if (err) {
+                                    console.log(err)
+                                }
+                                else {
+                                    console.log('recurring id added');
+                                    //res.sendStatus(200);
+                                }
+                            })
+                        }
+                         else {
+                         user.billDate = response.date;
+                         user.recurring_id = response.recurring_id;
+                         user.save(function (err) {
+                             if (err) {
+                                console.log(err)
+                             }
+                             else {
+                                console.log('recurring id added');
+                             //res.sendStatus(200);
+                             }
+                         })
+                         }
+                    });
+                    res.sendStatus(200);
+                });
+
+            } if(invExists){
+                User.findOne({username: req.body.username}, function(err, user){
+                    if(err){console.log(err);}
+                    if(!user) {
+                        var user = new User(req.body);
+                        user.recurring_id = inv.recurring_id;
+                        user.billDate = inv.date;
+                        user.client_id = inv.client_id;
+                        user.save(function (err) {
+                            if (err) {
+                                console.log(err)
+                            }
+                            else {
+                                console.log('recurring id added');
+                                res.sendStatus(200);
+                            }
+                        })
+                    }
+                    else{
+                        user.billDate = inv.date;
+                        user.recurring_id = inv.recurring_id;
+                        user.save(function (err) {
+                            if (err) {
+                                console.log(err)
+                            }
+                            else {
+                                console.log('recurring id added');
+                                res.sendStatus(200);
+                            }
+                        })
+                    }
+
                 })
+
             }
-        });
-        res.sendStatus(200);
-    });
+        }
+    })
+
 });
 
 //create recurring invoice for addtional members on business acct
@@ -361,5 +429,16 @@ router.delete('/:username?', expressJwt({secret: process.env.SECRET}), function 
       res.status(401).json({err: 'Not Authorized'});
     }
 });
+
+//The postMongo variable stores the function to post info to the MongoDB- this will be called later
+var postMongo = function (user) {
+    var user = new User(user);
+    user.save(function (err) {
+        if (err) {
+            console.log('mongo error thrown ', err);
+        }
+    })
+};
+
 
 module.exports = router;
