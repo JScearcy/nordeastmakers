@@ -1,14 +1,17 @@
-app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function($scope, $http, $location, $rootScope, $mdDialog){
-  function getUsers(){
-  return $http({
-    method: 'GET',
-    url: '/users'
-    }).then(function(res){
-      $scope.users = res.data;
-    });
-  }
+app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function ($scope, $http, $location, $rootScope, $mdDialog) {
+    function getUsers() {
+        $scope.loading = true;
+        return $http({
+            method: 'GET',
+            url: '/users'
+        }).then(function (res) {
+            $scope.loading = false;
+            $scope.users = res.data;
+            console.log($scope.users);
+        });
+    }
 
-  getUsers();
+    getUsers();
 
     $scope.updateUser = function (index) {
         $scope.loading = true;
@@ -27,7 +30,9 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
 
     $scope.deleteUser = function (index) {
         $scope.loading = true;
+        console.log('this is the index on delete ' + index);
         var deletethem = {'username': $scope.users[index].username};
+        console.log(deletethem);
         $http({
             method: 'DELETE',
             url: '/users',
@@ -39,6 +44,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
             }
         });
     };
+
 
     $scope.addUser = function (ev) {
         $mdDialog.show({
@@ -53,37 +59,20 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
         });
     };
 
-    $scope.updatePasswordForm = function (index, ev) {
+    $scope.updatePasswordForm = function (user, ev) {
+
         $mdDialog.show({
-            controller: 'userAdminCtrl',
+            controller: 'updatePasswordCtrl',
             templateUrl: '/private/updatePassword.html',
             parent: angular.element(document.body),
             targentEvent: ev,
             clickOutsideToClose: true,
-            locals: {
-                //user: user
-            }
-        }).then(function (err, data) {
+            locals: {user: user}
 
+        }).then(function (data) {
 
         });
         //.then is optional here
     };
 
-    $scope.updatePassword = function (user) {
-        $scope.loading = true;
-        var updatethem = {'password': user.newpassword, 'username': user.username};
-        $http({
-            method: 'PUT',
-            url: '/users',
-            params: updatethem
-        }).then(function (res) {
-            $scope.loading = false;
-            if (res.status == 200) {
-                getUsers();
-            }
-        }).finally(function () {
-            $scope.loading = false;
-        });
-    };
 }]);
