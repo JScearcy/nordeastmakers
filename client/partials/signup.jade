@@ -28,8 +28,9 @@ article(class="loginPage")
         p(class="mobileErrMess" ng-show="form.mobile.$invalid && !form.mobile.$pristine") No Spaces, No Dashes, Numbers Only
       md-input-container(class="inputItem")
         label(for="password") Password
-        input(name="password" ng-model="user.password" ng-blur="lostFocus = true" type="password" id="password" required)
-        p(class="passErrMess" ng-show="form.password.$invalid && !form.password.$pristine") Required
+        input(name="password" ng-model="user.password" ng-blur="lostFocus = true" type="password" id="password" pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,32}$" required)
+        p(ng-show="form.password.$invalid && !form.password.$pristine") needs at least one letter, number, and special char.
+        p(ng-show="form.password.$invalid && !form.password.$pristine") password must be 8-32 characters long
       md-input-container(class="inputItem")
         label(for="verifypassword") Type that Password Again
         input(name="verifypassword" ng-blur="lostFocus = true" ng-model="user.verifypassword" type="password" id="verifypassword" is-match="user.password" required)

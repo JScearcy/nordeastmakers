@@ -5,17 +5,17 @@ article(class="loginPage")
             img(class="logo" src="/images/Nordeast-Makers-Logo1.png" alt="Nordead Makers Logo")
         div(class="login register" ng-hide="loading")
             #login PAYMENT
-    form(class="registrationForm" ng-hide="loading")
+    form(class="registrationForm" ng-hide="loading" name="signup2")
 
       md-input-container(class="inputItem")
         label(for="cardname") Name on Card
-        input(name="cardname" ng-model="user.cardName" type="text" id="cardname")
+        input(name="cardname" ng-model="user.cardName" type="text" id="cardname" required)
       md-input-container(class="inputItem")
         label(for="cardnumber") Card Number
-        input(name="cardnumber" ng-model="user.cardNumber" type="text" pattern="[0-9]{13,19}" id="cardnumber")
+        input(name="cardnumber" ng-model="user.cardNumber" type="text" pattern="[0-9]{13,19}" id="cardnumber" required)
       md-input-container(class="inputItem")
         label(for="expiration") Expiration
-        input(name="expiration" ng-model="user.expiration" type="month" id="expiration")
+        input(name="expiration" ng-model="user.expiration" type="month" id="expiration" required)
       md-content(class="waiver" layout="column")
         md-content(flex layout="row" layout-align="center")
           md-content(flex="60")
@@ -31,12 +31,12 @@ article(class="loginPage")
             p Qui utamur tacimates quaestio ad, quod graece omnium ius ut. Pri ut vero debitis interpretaris, qui cu mentitum adipiscing disputationi. Voluptatum mediocritatem quo ut. Fabulas dolorem ei has, quem molestie persequeris et sit.
             p Est in vivendum comprehensam conclusionemque, alia cetero iriure no usu, te cibo deterruisset pro. Ludus epicurei quo id, ex cum iudicabit intellegebat. Ex modo deseruisse quo, mel noster menandri sententiae ea, duo et tritani malorum recteque. Nullam suscipit partiendo nec id, indoctum vulputate per ex. Et has enim habemus tibique. Cu latine electram cum, ridens propriae intellegat eu mea.
       md-content(layout="row" layout-align="center")
-        md-checkbox(ng-model="user.waiver" aria-label="Waiver Acknowledgement") I have read and agree to the above waiver
+        md-checkbox(ng-model="user.waiver" aria-label="Waiver Acknowledgement" required) I have read and agree to the above waiver
 
     div(class="registerLink" ng-hide="loading")
       p(class="registerChg inputItem") Upon signing up, you will be charged $200 per month automatically until you cancel your membership.
       md-content(class="inputItem")
-        md-button(class="md-raised md-button md-primary loginBtn" ng-click="signUp()") Sign Up
+        md-button(class="md-raised md-button md-primary loginBtn" ng-disabled="signup2.$invalid" ng-click="signUp()") Sign Up
 
 div(layout="row" layout-sm="column" layout-align="space-around")
     md-progress-circular(md-mode="indeterminate" ng-show="loading")

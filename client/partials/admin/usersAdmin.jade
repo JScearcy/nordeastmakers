@@ -1,8 +1,8 @@
 div(ng-controller="userAdminCtrl")
-  md-content(ng-hide="accountType != 'admin'" class="bgrndMast ")
-    md-button(class="machineButton md-primary md-raised" ng-click="addUser($event)") Add User
   div(layout="row" layout-sm="column" layout-align="space-around")
     md-progress-circular(md-mode="indeterminate" ng-show="loading")
+  md-content(ng-hide="accountType != 'admin'" class="bgrndMast ")
+    md-button(class="machineButton md-primary md-raised" ng-click="addUser($event)") Add User
   div(ng-repeat="user in users" class="usersWidth")
     header
       div(class="login")

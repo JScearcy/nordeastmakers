@@ -1,14 +1,17 @@
-app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function($scope, $http, $location, $rootScope, $mdDialog){
-  function getUsers(){
-  return $http({
-    method: 'GET',
-    url: '/users'
-    }).then(function(res){
-      $scope.users = res.data;
-    });
-  }
+app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '$mdDialog', function ($scope, $http, $location, $rootScope, $mdDialog) {
+    function getUsers() {
+        $scope.loading = true;
+        return $http({
+            method: 'GET',
+            url: '/users'
+        }).then(function (res) {
+            $scope.loading = false;
+            $scope.users = res.data;
+            console.log($scope.users);
+        });
+    }
 
-  getUsers();
+    getUsers();
 
     $scope.updateUser = function (index) {
         $scope.loading = true;
@@ -28,7 +31,9 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
 
     $scope.deleteUser = function (index) {
         $scope.loading = true;
+        console.log('this is the index on delete ' + index);
         var deletethem = {'username': $scope.users[index].username};
+        console.log(deletethem);
         $http({
             method: 'DELETE',
             url: '/users',
@@ -40,6 +45,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
             }
         });
     };
+
 
     $scope.addUser = function (ev) {
         $mdDialog.show({
@@ -55,6 +61,7 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
     };
 
     $scope.updatePasswordForm = function (user, ev) {
+
         $mdDialog.show({
             controller: 'updatePasswordCtrl',
             templateUrl: '/private/updatePassword.html',
@@ -64,7 +71,9 @@ app.controller('userAdminCtrl', ['$scope', '$http', '$location', '$rootScope', '
             locals: {user: user}
 
         }).then(function (data) {
+
         });
         //.then is optional here
     };
+
 }]);

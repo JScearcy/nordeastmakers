@@ -1,40 +1,31 @@
 var express = require('express');
 var router = express.Router();
 var Booking = require('../models/booking');
-var Freshbooks = require('freshbooksjs');
-var freshbooks = new Freshbooks(process.env.APIURL, process.env.APIKEY);
 
-router.get('/inv', function(req, res){
-    freshbooks.invoice.list(function(err, result){
-        var inv = [];
-        result.forEach(function(elem, index){
-            console.log(elem.recurring_id, elem.status, elem.date);
-            if(elem.recurring_id == '34176'){
-                inv.push(elem);
-            }
-        })
-/*
-        result.forEach(function(elem, index){
-            if(parseInt(elem.number) == Math.max.apply(null,arr)){
-                inv.push(elem);
-            }
-        })
-*/
-        res.send(inv);
-    })
-})
+router.get('/:toolId?', function(req, res){
+    var today = new Date();
+    today.setDate(today.getDate()-1);
+    today.setHours(0);
+    today.setMinutes(0);
+    today.setSeconds(0);
 
+    //retrieve all date objects for given toolId and exclude objects that are in the past
+    Booking.find({toolId: req.params.toolId},function(err, result){
+        var tempArray = [];
 
-router.get('/:toolId?/:date?', function(req, res){
-  console.log('getting booked timeslots', req.params);
-    Booking.findOne({date: req.params.date, toolId: req.params.toolId}, function(err, result){
         if(err){console.log(err);}
-        res.send(result);
+        result.forEach(function(element, index, array){
+            if(new Date(element.date) > today){
+                tempArray.push(element);
+            }
+        })
+        res.send(tempArray);
     })
 })
 
 
 router.post('/', function(req, res){
+
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(err){console.log(err);}
 
@@ -43,13 +34,14 @@ router.post('/', function(req, res){
             var booking = new Booking(req.body);
             booking.save(function(err, result){
                 if(err){
-                    //console.log('error thrown ', err.message);
+                    console.log('error thrown ', err.message);
                 }
                 else{
                     console.log('booking saved');
                     res.sendStatus(200);
                 }
             })
+
         }
 
         //if date objects exists, reserve those timeslots that are avaliable and discard the rest
@@ -57,7 +49,7 @@ router.post('/', function(req, res){
             req.body.reservations = spliceArray(result.reservations, req.body.reservations);
             req.body.reservations.forEach(function(element, index, array){
                 result.reservations.push(element);
-            })
+            });
             console.log('all bookings.. ', result.reservations);
             result.save(function(err, result){
                 if(err){console.log(err);}
@@ -67,32 +59,41 @@ router.post('/', function(req, res){
             })
         }
 
-    })//end findOne
-})//end post
+    });//end findOne
+});//end post
+
 
 router.delete('/', function(req, res){
 
-    var reqArray = [{hr: 8}, {hr: 9}, {hr: 13}, {hr: 14}];
+    //Remove requsested timeslots from date object's array of reservations
+
     Booking.findOne({date: req.body.date, toolId: req.body.toolId}, function(err, result){
         if(result){
-            //result.reservations = spliceArray(, result.reservations);
-            result.save(function(err, result){
-                if(err){console.log(err);}
-                res.send(result);
-            })
+            result.reservations = spliceArray(req.body.reservations, result.reservations);
+            console.log('printing reservations length: ', result.reservations.length);
+            if(result.reservations.length == 0){
+                result.remove(function(err, result){
+                    if(err){console.log(err);}
+                    res.send(result);
+                })
+            }
+            else {
+                result.save(function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    res.send(result);
+                })
+            }
         }
 
     })
 });
 
-
-
 function spliceArray(a, b){
-    console.log('in splicearray');
     for(i=0; i< a.length; i++){
         b.forEach(function(element,index,array){
             if(element.hr == a[i].hr){
-                console.log('match: ', element.hr, a[i].hr)
                 b.splice(index, 1);
             }
         })
@@ -100,7 +101,6 @@ function spliceArray(a, b){
     return b;
 }
 
+
 module.exports = router;
-
-
 

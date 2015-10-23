@@ -145,6 +145,7 @@ a {
 .machineButton {
   margin: 5px 0 5px auto;
 }
+
 .height100 {
   height: 100%;
 }
@@ -153,6 +154,7 @@ a {
     width: 500px;
   }
 }
+
 
 th {
   padding: 10px;
@@ -167,3 +169,8 @@ td {
 }
 
 table thead th { border-bottom: 3px solid #000; }
+
+
+.center {
+  text-align: center;
+}

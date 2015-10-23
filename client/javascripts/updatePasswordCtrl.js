@@ -1,6 +1,3 @@
-/**
- * Created by MrComputer on 10/21/15.
- */
 app.controller('updatePasswordCtrl', ['$scope', '$http', 'user', function($scope, $http, user){
 
     $scope.updatePassword = function () {

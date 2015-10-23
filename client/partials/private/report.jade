@@ -4,16 +4,21 @@ div(ng-controller="reportCtrl" class="contentPane" layout="row" layout-align="ce
       div(class="login")
         #reportIssue REPORT AN ISSUE
         #reminder Please do not try to fix the machine. Thanks!
-    form(layout="column" name="reportForm" class="loginForm")
+    form(layout="column" name="reportForm" class="loginForm" ng-hide="loading || messaged")
       md-input-container(class="inputItem")
         label(for="username") Username
         input(type="text" name="username" id="username" aria-label="Username of reporter" value="{{user.user}}" readonly)
       md-input-container(class="inputItem")
         label(for="machines") Tool
-        md-select(name='machines' id='machines' ng-model='report.toolName' aria-label="Select machine")
+        md-select(name='machines' id='machines' ng-model='report.toolName' aria-label="Select machine" required)
           md-option(ng-repeat="machine in machines") {{machine.toolName}}
       md-input-container(class="inputItem")
         label(for="issue") What's the issue?
-        textarea(rows="3" cols="3" name="issue" id="issue" ng-model="report.issueReport" flex="100" aria-label="Issue input")
+        textarea(rows="3" cols="3" name="issue" id="issue" ng-model="report.issueReport" flex="100" aria-label="Issue input" required)
       md-content(class="inputItem")
-        input(type="submit" ng-click="sendReport()" value="Submit Issue" id="submitIssue" class="loginBtn md-button md-raised md-primary")
+        input(type="submit" ng-click="sendReport()" value="Submit Issue"  ng-disabled="reportForm.$invalid" id="submitIssue" class="loginBtn md-button md-raised md-primary")
+    p(class="center" ng-show="messaged") Thanks for the Feedback
+
+  div(layout="row" layout-sm="column" layout-align="space-around")
+    md-progress-circular(md-mode="indeterminate" ng-show="loading")
+
