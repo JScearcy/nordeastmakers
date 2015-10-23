@@ -4,6 +4,8 @@ app.controller('scheduledCtrl', ['$scope', '$http', '$location', 'hoursService',
   $scope.hours = new hoursService.dayHours();
   $scope.date = new Date();
   $scope.displaydate = moment($scope.date).format('MMM-DD-YYYY');
+  $scope.active = user.active;
+  $scope.billDate = moment(user.billDate).add(1, 'month').format('MMM-DD-YYYY');
 
   $scope.minDate = new Date(
       $scope.date.getFullYear(),
@@ -15,6 +17,7 @@ app.controller('scheduledCtrl', ['$scope', '$http', '$location', 'hoursService',
       $scope.date.getDate());
 
   $scope.updateScheduled = function(){
+    $scope.displaydate = moment($scope.date).format('MMM-DD-YYYY');
     return hoursService.machines(function(machines){
       $scope.machines = machines;
       displayReserved();

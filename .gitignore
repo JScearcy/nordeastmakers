@@ -2,3 +2,6 @@ node_modules
 .idea/
 npm-debug.log
 app.min.js
+users.js
+bookings.js
+
